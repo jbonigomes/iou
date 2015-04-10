@@ -1,4 +1,6 @@
-angular.module('starter.controllers', [])
+'use strict';
+
+angular.module('iou.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
   // Form data for the login modal
@@ -44,5 +46,27 @@ angular.module('starter.controllers', [])
   ];
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('PlaylistCtrl', function($scope, $stateParams, iouref) {
+  console.log($stateParams);
+
+  $scope.users = iouref.users;
+
+  // we add chatMessages array to the scope to be used in our ng-repeat
+  $scope.logs = iouref.logs;
+
+  $scope.addLogs = function() {
+    // calling $add on a synchronized array is like Array.push(),
+    // except that it saves the changes to Firebase!
+    $scope.logs.$add({
+      bought: {},
+      image: 'lightbulb',
+      members: {
+        '10152357995965379': true
+      },
+      name: 'A test log list'
+    });
+
+    // reset the message input
+    // $scope.message = "";
+  };
 });
