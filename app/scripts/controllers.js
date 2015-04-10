@@ -47,7 +47,6 @@ angular.module('iou.controllers', [])
 })
 
 .controller('PlaylistCtrl', function($scope, $stateParams, iouref) {
-  console.log($stateParams);
 
   $scope.users = iouref.users;
 
