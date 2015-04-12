@@ -388,14 +388,15 @@ module.exports = function (grunt) {
         }
       },
       unit: {
-        // Change this to 'Chrome', 'Firefox', etc. Note that you will need
+        // Change this to 'Chrome', 'Firefox', 'PhantomJS' etc. Note that you will need
         // to install a karma launcher plugin for browsers other than Chrome.
-        browsers: ['PhantomJS'],
+        browsers: ['Chrome'],
         background: true
+        // runnerPort: 9101
       },
       continuous: {
-        browsers: ['PhantomJS'],
-        singleRun: true,
+        browsers: ['Chrome'],
+        singleRun: true
       }
     },
 
