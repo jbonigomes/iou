@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
- angular.module('config', [])
+ angular.module('IOU.configuration', [])
 
-.constant('ENV', {name:'development',apiEndpoint:'http://dev.yoursite.com:10000/'})
+.constant('ENV', {name:'development',apiEndpoint:'https://josefirebaseseed.firebaseio.com/',facebookEndpoint:'https://graph.facebook.com/v2.0/'})
 
 ;

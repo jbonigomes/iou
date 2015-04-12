@@ -35,15 +35,16 @@ module.exports = function (grunt) {
     ngconstant: {
       options: {
         space: '  ',
-        wrap: '"use strict";\n\n {%= __ngModule %}',
-        name: 'config',
+        wrap: '\'use strict\';\n\n {%= __ngModule %}',
+        name: 'IOU.configuration',
         dest: '<%= yeoman.app %>/<%= yeoman.scripts %>/configuration.js'
       },
       development: {
         constants: {
           ENV: {
             name: 'development',
-            apiEndpoint: 'http://dev.yoursite.com:10000/'
+            apiEndpoint: 'https://josefirebaseseed.firebaseio.com/',
+            facebookEndpoint: 'https://graph.facebook.com/v2.0/'
           }
         }
       },
@@ -51,7 +52,8 @@ module.exports = function (grunt) {
         constants: {
           ENV: {
             name: 'production',
-            apiEndpoint: 'http://api.yoursite.com/'
+            apiEndpoint: 'https://josefirebaseseed.firebaseio.com/',
+            facebookEndpoint: 'https://graph.facebook.com/v2.0/'
           }
         }
       }
@@ -532,7 +534,6 @@ module.exports = function (grunt) {
     'newer:copy:app',
     'newer:copy:tmp'
   ]);
-
 
   grunt.registerTask('compress', [
     'clean',
