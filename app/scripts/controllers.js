@@ -29,6 +29,11 @@ angular.module('IOU.controllers', [])
       $scope.closeLogin();
     }, 1000);
   };
+
+  $scope.user = {
+    fbid: '10152357995965379',
+    username: 'Jose'
+  };
 })
 
 .controller('HomeCtrl', function($scope) {
@@ -36,22 +41,26 @@ angular.module('IOU.controllers', [])
     id: 1,
     title: 'BBQ on Sunday',
     total: 10,
-    type: 'negative'
+    type: 'negative-total',
+    image: 'test'
   },{
     id: 2,
     title: 'Tesco\'s Groceries',
     total: 20,
-    type: 'positive'
+    type: 'positive-total',
+    image: 'test'
   },{
     id: 3,
     title: 'Households',
     total: 0,
-    type: 'neutral'
+    type: 'neutral-total',
+    image: 'test'
   }];
 
   $scope.total = {
     value: 10,
-    type: 'negative'
+    type: 'negative-total',
+    image: 'test'
   };
 })
 

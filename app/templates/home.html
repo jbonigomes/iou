@@ -1,5 +1,33 @@
 <ion-view view-title="IOU">
   <ion-content>
-    <h1>Home</h1>
+    <div class="list">
+      <div class="bar bar-header item-input-inset">
+        <ion-search placeholder="Search" filter="search"></ion-search>
+      </div>
+
+      <ion-list can-swipe="true">
+        <ion-item ng-repeat="item in lists | filter:search.value" href="#/app/items/{{item.id}}" class="item-content">
+
+          <!-- <img src="images/log_{{item.image}}.png"> -->
+          <img src="https://graph.facebook.com/{{user.fbid}}/picture">
+          <span>{{ item.title }}</span>
+          <span class="{{item.type}}">
+            {{item.total | currency}}
+          </span>
+
+          <ion-option-button class="button-assertive icon ion-trash-a">
+          </ion-option-button>
+
+          <ion-option-button class="button-positive icon ion-edit">
+          </ion-option-button>
+
+        </ion-item>
+      </ion-list>
+    </div>
   </ion-content>
+  <ion-footer-bar>
+    <a href="#/app/home" class="button button-block button-positive">
+      NEW
+    </a>
+  </ion-footer-bar>
 </ion-view>
