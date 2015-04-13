@@ -64,10 +64,14 @@ angular.module('IOU.controllers', [])
   };
 })
 
+.controller('NewListCtrl', function($scope) {
+
+})
+
 .controller('PrivacyCtrl', function() {
 
 })
 
 .controller('TermsCtrl', function() {
-  
+
 });

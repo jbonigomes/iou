@@ -22,6 +22,16 @@ angular.module('IOU.routes', [])
     }
   })
 
+  .state('app.newlist', {
+    url: '/home/new',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/new_list.html',
+        controller: 'NewListCtrl'
+      }
+    }
+  })
+
   .state('app.privacy', {
     url: '/privacy',
     views: {

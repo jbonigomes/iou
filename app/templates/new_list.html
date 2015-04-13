@@ -1,0 +1,108 @@
+<ion-view view-title="IOU">
+  <form ng-submit="submitLog()">
+    <ion-content>
+
+      <div class="list">
+        <label class="item item-input">
+          <i class="icon ion-android-book placeholder-icon"></i>
+          <input type="text" placeholder="List Name" ng-model="list.name" required>
+        </label>
+      </div>
+
+      <div class="img-radios">
+
+          <div class="row">
+            <div class="col">
+              <label for="logImagebag">
+                <img src="images/log_bag.png" ng-class="{ active: (list.image == 'bag') }">
+                <input id="logImagebag"
+                       type="radio"
+                       name="prodImg"
+                       ng-model="list.image"
+                       value="bag">
+              </label>
+            </div>
+            <div class="col">
+              <label for="logImagebook">
+                <img src="images/log_book.png" ng-class="{ active: (list.image == 'book') }">
+                <input id="logImagebook"
+                       type="radio"
+                       name="prodImg"
+                       ng-model="list.image"
+                       value="book">
+              </label>
+            </div>
+            <div class="col">
+              <label for="logImagebookshelf">
+                <img src="images/log_bookshelf.png" ng-class="{ active: (list.image == 'bookshelf') }">
+                <input id="logImagebookshelf"
+                       type="radio"
+                       name="prodImg"
+                       ng-model="list.image"
+                       value="bookshelf">
+              </label>
+            </div>
+            <div class="col">
+              <label for="logImageclock">
+                <img src="images/log_clock.png" ng-class="{ active: (list.image == 'clock') }">
+                <input id="logImageclock"
+                       type="radio"
+                       name="prodImg"
+                       ng-model="list.image"
+                       value="clock">
+              </label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <label for="logImagebrowser">
+                <img src="images/log_browser.png" ng-class="{ active: (list.image == 'browser') }">
+                <input id="logImagebrowser"
+                       type="radio"
+                       name="prodImg"
+                       ng-model="list.image"
+                       value="browser">
+              </label>
+            </div>
+            <div class="col">
+              <label for="logImagehazard">
+                <img src="images/log_hazard.png" ng-class="{ active: (list.image == 'hazard') }">
+                <input id="logImagehazard"
+                       type="radio"
+                       name="prodImg"
+                       ng-model="list.image"
+                       value="hazard">
+              </label>
+            </div>
+            <div class="col">
+              <label for="logImagelayers">
+                <img src="images/log_layers.png" ng-class="{ active: (list.image == 'layers') }">
+                <input id="logImagelayers"
+                       type="radio"
+                       name="prodImg"
+                       ng-model="list.image"
+                       value="layers">
+              </label>
+            </div>
+            <div class="col">
+              <label for="logImagelightbulb">
+                <img src="images/log_lightbulb.png" ng-class="{ active: (list.image == 'lightbulb') }">
+                <input id="logImagelightbulb"
+                       type="radio"
+                       name="prodImg"
+                       ng-model="list.image"
+                       value="lightbulb">
+              </label>
+            </div>
+          </div>
+        </div>
+
+    </ion-content>
+    <ion-footer-bar>
+      <button class="button button-block button-positive">
+        SAVE
+      </button>
+    </ion-footer-bar>
+  </form>
+</ion-view>
