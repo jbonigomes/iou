@@ -1,0 +1,25 @@
+<ion-view view-title="IOU">
+  <ion-content>
+    <div class="list">
+      <label class="item item-input">
+        <i class="icon ion-ios-pint placeholder-icon"></i>
+        <input type="text" placeholder="Item name" ng-model="product.name" required>
+      </label>
+
+      <label class="item item-input">
+        <i class="icon ion-cash placeholder-icon"></i>
+        <input type="text" placeholder="0.00" ng-model="product.price" required>
+      </label>
+
+      <label class="item item-input">
+        <i class="icon ion-person placeholder-icon"></i>
+        <input type="text" placeholder="Jose" ng-model="product.owner" required>
+      </label>
+    </div>
+  </ion-content>
+  <ion-footer-bar>
+    <a href="#/app/products/{{product.id}}" class="button button-block button-positive">
+      OK
+    </a>
+  </ion-footer-bar>
+</ion-view>

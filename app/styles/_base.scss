@@ -19,6 +19,29 @@
   vertical-align: .05em;
 }
 
+.members-list {
+  .negative-total:before {
+    font-size: 12px;
+    content: 'you owe ';
+    font-weight: normal;
+    color: $clr_dark_grey;
+  }
+
+  .positive-total:before {
+    font-size: 12px;
+    font-weight: normal;
+    content: 'owes you ';
+    color: $clr_dark_grey;
+  }
+
+  .neutral-total:before {
+    font-size: 12px;
+    content: 'even ';
+    font-weight: normal;
+    color: $clr_dark_grey;
+  }
+}
+
 .overviewprice {
   padding: 30px;
   font-size: 40px;

@@ -61,7 +61,7 @@ angular.module('IOU.routes', [])
   })
 
   .state('app.editproduct', {
-    url: '/products/edit/:listid',
+    url: '/editproduct/:productid',
     views: {
       'menuContent': {
         templateUrl: 'templates/edit_product.html',
@@ -71,7 +71,7 @@ angular.module('IOU.routes', [])
   })
 
   .state('app.newproduct', {
-    url: '/products/new',
+    url: '/newproduct',
     views: {
       'menuContent': {
         templateUrl: 'templates/new_product.html',

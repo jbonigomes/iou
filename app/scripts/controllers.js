@@ -3,7 +3,7 @@
 angular.module('IOU.controllers', [])
 
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $state) {
 
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -22,23 +22,22 @@ angular.module('IOU.controllers', [])
     $scope.modal.show();
   };
 
-  // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
-  };
-
   $scope.user = {
     fbid: '10152357995965379',
     username: 'Jose'
   };
+
+  $scope.listid = null;
 })
 
 
 .controller('HomeCtrl', function($scope) {
+
+  $scope.goToList = function(listid) {
+    $scope.listid = listid;
+    $state.go('app.products');
+  };
+
   $scope.lists = [{
     id: 1,
     title: 'BBQ on Sunday',
@@ -117,18 +116,47 @@ angular.module('IOU.controllers', [])
 })
 
 
-.controller('NewProductCtrl', function($scope) {
-
+.controller('NewProductCtrl', function($scope, $ionicHistory) {
+  $scope.goBack = function() {
+    $ionicHistory.goBack();
+  }
 })
 
 
 .controller('EditProductCtrl', function($scope) {
-
+  $scope.product = {
+    id: 1,
+    title: 'Carrots',
+    owner: '10152357995965379',
+    price: 10,
+    date: 1412635438623,
+    amended: false
+  };
 })
 
 
 .controller('MembersCtrl', function($scope) {
+  $scope.members = [{
+    name: 'Nik',
+    fbid: '10152357995965379',
+    total: 10,
+    type: 'positive-total'
+  },{
+    name: 'Andy',
+    fbid: '10152357995965379',
+    total: 10,
+    type: 'negative-total'
+  },{
+    name: 'Gabe',
+    fbid: '10152357995965379',
+    total: 10,
+    type: 'neutral-total'
+  }];
 
+  $scope.total = {
+    value: 10,
+    type: 'positive-total'
+  };
 })
 
 
