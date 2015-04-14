@@ -1,0 +1,18 @@
+.img-radios {
+  img {
+    width: 100%;
+    opacity: .5;
+  }
+
+  img.active {
+    opacity: 1;
+  }
+
+  input[type="radio"] {
+    display: none;
+  }
+
+  label {
+    display: block;
+  }
+}

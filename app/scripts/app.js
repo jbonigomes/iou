@@ -7,7 +7,8 @@ angular.module('IOU', [
   'IOU.routes',
   'IOU.controllers',
   'IOU.services',
-  'IOU.directives'
+  'IOU.directives',
+  'IOU.filters'
 ])
 
 .run(function($ionicPlatform) {

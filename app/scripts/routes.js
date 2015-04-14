@@ -36,8 +36,7 @@ angular.module('IOU.routes', [])
     url: '/privacy',
     views: {
       'menuContent': {
-        templateUrl: 'templates/privacy.html',
-        controller: 'PrivacyCtrl'
+        templateUrl: 'templates/privacy.html'
       }
     }
   })
@@ -46,21 +45,50 @@ angular.module('IOU.routes', [])
     url: '/terms',
     views: {
       'menuContent': {
-        templateUrl: 'templates/terms.html',
-        controller: 'TermsCtrl'
+        templateUrl: 'templates/terms.html'
+      }
+    }
+  })
+
+  .state('app.products', {
+    url: '/products/:listid',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/products.html',
+        controller: 'ProductsCtrl'
+      }
+    }
+  })
+
+  .state('app.editproduct', {
+    url: '/products/edit/:listid',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/edit_product.html',
+        controller: 'EditProductCtrl'
+      }
+    }
+  })
+
+  .state('app.newproduct', {
+    url: '/products/new',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/new_product.html',
+        controller: 'NewProductCtrl'
+      }
+    }
+  })
+
+  .state('app.members', {
+    url: '/members/:listid',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/members.html',
+        controller: 'MembersCtrl'
       }
     }
   });
-
-  // .state('app.single', {
-  //   url: '/playlists/:playlistId',
-  //   views: {
-  //     'menuContent': {
-  //       templateUrl: 'templates/playlist.html',
-  //       controller: 'PlaylistCtrl'
-  //     }
-  //   }
-  // });
 
   $urlRouterProvider.otherwise('/app/home');
 });

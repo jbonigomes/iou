@@ -1,0 +1,47 @@
+<ion-view view-title="IOU">
+  <ion-content>
+
+    <div class="overviewprice {{total.type}}">
+      {{ total.value | currency:'£':2 }}
+    </div>
+
+    <div class="inner-menu">
+      <a href="" class="active">LIST</a>
+      <a href="">MEMBERS</a>
+    </div>
+
+    <div class="list">
+      <ion-list>
+        <div class="item item-divider">Items to buy</div>
+        <!-- href="#/app/products/edit/{{item.id}}" -->
+        <ion-item ng-repeat="item in tobuy"
+                  class="item-content lists-list products-list">
+          <img src="images/tobuy.png">
+          <span>{{ item.title }}</span>
+        </ion-item>
+
+        <div class="item item-divider">Bought items</div>
+        <ion-item ng-repeat="item in bought"
+                  href="#/app/products/edit/{{item.id}}"
+                  class="item-content lists-list products-list">
+
+          <img ng-src="https://graph.facebook.com/{{item.owner}}/picture">
+          <span>bought {{ item.title }}</span>
+          <span class="pricetag {{item.type}}">
+            {{ item.price | currency:'£':2 }}
+          </span>
+          <span class="datetag">
+            {{ item.amended | iif: 'amended @ ' : '' }}
+            {{ item.date  | date:'d MMM yyyy' }}
+          </span>
+        </ion-item>
+      </ion-list>
+    </div>
+
+  </ion-content>
+  <ion-footer-bar>
+    <a href="#/app/home" class="button button-block button-positive">
+      NEW
+    </a>
+  </ion-footer-bar>
+</ion-view>

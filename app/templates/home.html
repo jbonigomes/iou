@@ -1,18 +1,24 @@
 <ion-view view-title="IOU">
   <ion-content>
+
+    <div class="overviewprice {{total.type}}">
+      {{ total.value | currency:'£':2 }}
+    </div>
+
     <div class="list">
       <div class="bar bar-header item-input-inset">
         <ion-search placeholder="Search" filter="search"></ion-search>
       </div>
 
       <ion-list can-swipe="true">
-        <ion-item ng-repeat="item in lists | filter:search.value" href="#/app/items/{{item.id}}" class="item-content">
+        <ion-item ng-repeat="item in lists | filter:search.value"
+                  href="#/app/products/{{item.id}}"
+                  class="item-content lists-list">
 
-          <!-- <img src="images/log_{{item.image}}.png"> -->
-          <img src="https://graph.facebook.com/{{user.fbid}}/picture">
+          <img src="images/log_{{item.image}}.png">
           <span>{{ item.title }}</span>
-          <span class="{{item.type}}">
-            {{item.total | currency}}
+          <span class="pricetag {{item.type}}">
+            {{ item.total | currency:'£':2 }}
           </span>
 
           <ion-option-button class="button-assertive icon ion-trash-a">
