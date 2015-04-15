@@ -1,0 +1,35 @@
+<ion-view view-title="Login">
+  <ion-content>
+    <div class="info">
+      <button class="button button-block button-positive login-button">
+        <i class="ion-social-facebook"></i> FACEBOOK
+      </button>
+      <label class="toggle toggle-balanced">
+        <input type="checkbox" ng-model="acceptedterms">
+          <div class="track">
+          <div class="handle"></div>
+        </div>
+      </label>
+      <span class="accept-terms">
+        accept <a href="" ng-click="openTermsModal()">terms & conditions</a>
+      </span>
+      <div class="error" ng-hide="acceptedterms">
+        you must accept the terms &amp; conditions to proceed
+      </div>
+    </div>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" href="http://jbonigomesbbk.github.io/" target="_blank">
+      <i class="icon ion-home"></i>
+      About
+    </a>
+    <a class="tab-item">
+      <i class="icon ion-star" ng-click="openPrivacyModal()"></i>
+      Privacy
+    </a>
+    <a class="tab-item">
+      <i class="icon ion-gear-a" ng-click="openTermsModal()"></i>
+      Terms
+    </a>
+  </div>
+</ion-view>
