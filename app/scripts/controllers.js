@@ -3,24 +3,7 @@
 angular.module('IOU.controllers', [])
 
 
-.controller('AppCtrl', function($scope, $ionicModal, $state) {
-
-  // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
-
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
-  };
-
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
-  };
+.controller('AppCtrl', function($scope, $state) {
 
   $scope.user = {
     fbid: '10152357995965379',
@@ -28,6 +11,8 @@ angular.module('IOU.controllers', [])
   };
 
   $scope.listid = null;
+
+  $scope.noitems = false;
 })
 
 
@@ -65,7 +50,22 @@ angular.module('IOU.controllers', [])
 })
 
 
-.controller('ProductsCtrl', function($scope) {
+.controller('ProductsCtrl', function($scope, $ionicModal) {
+
+  // Create the login modal that we will use later
+  $ionicModal.fromTemplateUrl('templates/price.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+
+  $scope.openModal = function() {
+    $scope.modal.show();
+  };
 
   $scope.tobuy = [{
     id: 1,
@@ -157,6 +157,20 @@ angular.module('IOU.controllers', [])
     value: 10,
     type: 'positive-total'
   };
+})
+
+
+.controller('AddMemberCtrl', function($scope) {
+  $scope.members = [{
+    name: 'Nik',
+    fbid: '10152357995965379'
+  },{
+    name: 'Andy',
+    fbid: '10152357995965379'
+  },{
+    name: 'Gabe',
+    fbid: '10152357995965379'
+  }];
 })
 
 

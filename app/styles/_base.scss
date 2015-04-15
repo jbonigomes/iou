@@ -1,3 +1,20 @@
+.no-items {
+  padding: 40px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  color: $clr_dark_grey;
+}
+
+.pricemodal {
+  top: 60px;
+  left: 50%;
+  width: 80%;
+  min-height: 185px;
+  max-height: 185px;
+  margin-left: -40%;
+}
+
 .negative-total {
   color: $clr_red;
 }
@@ -40,6 +57,10 @@
     font-weight: normal;
     color: $clr_dark_grey;
   }
+
+  .add-user {
+    float: right;
+  }
 }
 
 .overviewprice {
@@ -56,7 +77,7 @@
     width: 50%;
     float: left;
     display: block;
-    padding: 30px 0;
+    padding: 20px;
     color: $clr_grey;
     font-weight: bold;
     text-align: center;
@@ -105,5 +126,32 @@
 
   .pricetag {
     margin-top: 5px;
+  }
+}
+
+.img-radios {
+  img {
+    width: 100%;
+    opacity: .5;
+  }
+
+  img.active {
+    opacity: 1;
+  }
+
+  input[type="radio"] {
+    display: none;
+  }
+
+  label {
+    display: block;
+  }
+}
+
+.info {
+  padding: 30px 20px;
+
+  h2 {
+    font-size: 20px;
   }
 }

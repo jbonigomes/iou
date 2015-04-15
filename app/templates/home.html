@@ -5,6 +5,10 @@
       {{ total.value | currency:'£':2 }}
     </div>
 
+    <div class="no-items" ng-show="noitems">
+      You do not have any lists yet, click the ‘NEW’ button below to get started
+    </div>
+
     <div class="list">
       <div class="bar bar-header item-input-inset">
         <ion-search placeholder="Search" filter="search"></ion-search>

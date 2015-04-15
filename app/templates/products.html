@@ -10,11 +10,16 @@
       <a href="#/app/members/{{listid}}">MEMBERS</a>
     </div>
 
+    <div class="no-items" ng-show="noitems">
+      You do not have any items yet, click the ‘New’ button below to get started
+    </div>
+
     <div class="list">
       <ion-list>
         <div class="item item-divider">Items to buy</div>
         <!-- href="#/app/editproduct/{{item.id}}" -->
         <ion-item ng-repeat="item in tobuy"
+                  ng-click="openModal()"
                   class="item-content lists-list products-list">
           <img src="images/tobuy.png">
           <span>{{ item.title }}</span>
@@ -26,7 +31,7 @@
                   class="item-content lists-list products-list">
 
           <img ng-src="https://graph.facebook.com/{{item.owner}}/picture">
-          <span>bought {{ item.title }}</span>
+          <span>{{ item.title }}</span>
           <span class="pricetag {{item.type}}">
             {{ item.price | currency:'£':2 }}
           </span>

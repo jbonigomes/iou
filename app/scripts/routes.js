@@ -88,7 +88,17 @@ angular.module('IOU.routes', [])
         controller: 'MembersCtrl'
       }
     }
-  });
+  })
+
+  .state('app.addmember', {
+    url: '/addmember',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/add_member.html',
+        controller: 'AddMemberCtrl'
+      }
+    }
+  })
 
   $urlRouterProvider.otherwise('/app/home');
 });
