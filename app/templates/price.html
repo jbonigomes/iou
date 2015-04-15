@@ -1,0 +1,23 @@
+<ion-modal-view class="pricemodal">
+  <ion-header-bar>
+    <h1 class="title">Price</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeModal()">X</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <form ng-submit="doLogin()">
+      <div class="list">
+        <label class="item item-input">
+        <i class="icon ion-cash placeholder-icon"></i>
+        <input type="text" placeholder="0.00" ng-model="product.price" required>
+      </label>
+        <label class="item">
+          <button class="button button-block button-positive" type="submit">
+            OK
+          </button>
+        </label>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>

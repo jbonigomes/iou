@@ -1,0 +1,23 @@
+<ion-view view-title="IOU">
+  <ion-content>
+    <div class="list">
+      <ion-list>
+        <div class="bar bar-header item-input-inset">
+          <ion-search placeholder="Search" filter="search"></ion-search>
+        </div>
+
+        <ion-item ng-repeat="member in members | filter:search.value"
+                  class="item-content lists-list members-list">
+          <img ng-src="https://graph.facebook.com/{{member.fbid}}/picture">
+          <span>{{ member.name }}</span>
+          <button class="button button-balanced add-user">ADD</button>
+        </ion-item>
+      </ion-list>
+    </div>
+  </ion-content>
+  <ion-footer-bar>
+    <a href="#/app/members/{{listid}}" class="button button-block button-positive">
+      OK
+    </a>
+  </ion-footer-bar>
+</ion-view>
