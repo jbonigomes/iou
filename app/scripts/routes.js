@@ -1,9 +1,16 @@
 'use strict';
 
+
 angular.module('IOU.routes', [])
 
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
+
+  .state('login', {
+    url: '/login',
+    templateUrl: 'templates/login.html',
+    controller: 'LoginCtrl'
+  })
 
   .state('app', {
     url: '/app',

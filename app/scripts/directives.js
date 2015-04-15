@@ -1,3 +1,6 @@
+'use strict';
+
+
 angular.module('IOU.directives', [])
 
 .directive('ionSearch', function() {

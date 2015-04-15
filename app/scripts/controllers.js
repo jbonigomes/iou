@@ -3,6 +3,57 @@
 angular.module('IOU.controllers', [])
 
 
+.controller('LoginCtrl', function($scope, $ionicModal) {
+  $ionicModal.fromTemplateUrl('templates/terms_modal.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.termsmodal = modal;
+  });
+
+  $ionicModal.fromTemplateUrl('templates/privacy_modal.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.privacymodal = modal;
+  });
+
+  $scope.closeTermsModal = function() {
+    $scope.termsmodal.hide();
+  };
+
+  $scope.openTermsModal = function() {
+    $scope.termsmodal.show();
+  };
+
+  $scope.closePrivacyModal = function() {
+    $scope.privacymodal.hide();
+  };
+
+  $scope.openPrivacyModal = function() {
+    $scope.privacymodal.show();
+  };
+
+  $scope.acceptedterms = true;
+
+  var ref = new Firebase("https://josefirebaseseed.firebaseio.com/");
+
+  // prefer pop-ups, so we don't navigate away from the page
+  ref.authWithOAuthPopup("facebook", function(error, authData) {
+    console.log('doing fb');
+    if (error) {
+      console.log('err fb');
+      if (error.code === "TRANSPORT_UNAVAILABLE") {
+        // fall-back to browser redirects, and pick up the session
+        // automatically when we come back to the origin page
+        ref.authWithOAuthRedirect("google", function(error) { /* ... */ });
+      }
+    } else if (authData) {
+      console.log('success fb');
+      // user authenticated with Firebase
+    }
+  });
+})
+
+
 .controller('AppCtrl', function($scope, $state) {
 
   $scope.user = {
@@ -52,7 +103,6 @@ angular.module('IOU.controllers', [])
 
 .controller('ProductsCtrl', function($scope, $ionicModal) {
 
-  // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/price.html', {
     scope: $scope
   }).then(function(modal) {

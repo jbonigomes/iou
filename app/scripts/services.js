@@ -1,5 +1,6 @@
 'use strict';
 
+
 angular.module('IOU.services', [])
 
 .factory('iouref', function($firebaseArray) {

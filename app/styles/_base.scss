@@ -1,3 +1,22 @@
+.error {
+  color: $clr_red;
+  text-align: center;
+}
+
+.accept-terms {
+  font-weight: bold;
+  vertical-align: 10px;
+  color: $clr_dark_grey;
+
+  a {
+    color: $clr_blue;
+  }
+}
+
+.button.button-block.login-button {
+  margin-top: 100px;
+}
+
 .no-items {
   padding: 40px;
   font-size: 14px;
