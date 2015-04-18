@@ -6,8 +6,8 @@ angular.module('IOU.controllers', [])
 .controller('AppCtrl', function($scope) {
 
   $scope.userdata = {
-    listid  = null;
-    noitems = false;
+    listid: null,
+    noitems: false
   };
 })
 

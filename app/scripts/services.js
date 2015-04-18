@@ -14,10 +14,16 @@ angular.module('IOU.services', [])
       localStorageService.set('userName', userdata.name);
       localStorageService.set('userToken', userdata.token);
       localStorageService.set('userEmail', userdata.email);
+
+      return true;
     },
 
     logout: function() {
       localStorageService.clearAll();
-    };
+
+      return true;
+    }
   };
+
+  return Login;
 });
