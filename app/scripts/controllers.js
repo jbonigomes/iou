@@ -3,7 +3,16 @@
 angular.module('IOU.controllers', [])
 
 
-.controller('LoginCtrl', function($scope, $ionicModal, $firebaseAuth, $cordovaOauth, iouref) {
+.controller('AppCtrl', function($scope) {
+
+  $scope.userdata = {
+    listid  = null;
+    noitems = false;
+  };
+})
+
+
+.controller('LoginCtrl', function($scope, $ionicModal, $firebaseAuth, $cordovaOauth, IOURef, Login) {
   $ionicModal.fromTemplateUrl('templates/terms_modal.html', {
     scope: $scope
   }).then(function(modal) {
@@ -34,42 +43,50 @@ angular.module('IOU.controllers', [])
 
   $scope.acceptedterms = true;
   $scope.loginerror = false;
+  $scope.loggedin = false;
 
-  var auth = $firebaseAuth(iouref);
+  var auth = $firebaseAuth(IOURef);
 
-  $scope.login = function() {
-    $cordovaOauth.facebook('379065752294307', ['email','user_friends']).then(function(result) {
-      auth.$authWithOAuthToken('facebook', result.access_token).then(function(authData) {
-        console.log(JSON.stringify(authData));
-        console.log('all good');
-      }, function(error) {
-        console.error('ERROR: ' + error);
-      });
-    }, function(error) {
-      console.log('ERROR: ' + error);
+  // must set this guy in the facebook app http://localhost/callback
+  // $scope.login = function() {
+  //   $cordovaOauth.facebook('379065752294307', ['email','user_friends']).then(function(result) {
+  //     auth.$authWithOAuthToken('facebook', result.access_token).then(function(authData) {
+  //       console.log(JSON.stringify(authData));
+  //       console.log('all good');
+  //       $scope.loggedin = true;
+  //     }, function(error) {
+  //       console.error('ERROR: ' + error);
+  //     });
+  //   }, function(error) {
+  //     console.log('ERROR: ' + error);
+  //   });
+  // };
+
+  // must set this bad boy on facebook to https://auth.firebase.com/v2/ioutest/auth/facebook/callback
+  $scope.login = function () {
+    auth.$authWithOAuthPopup('facebook', { scope: 'email,user_friends' }).then(function(oauthdata) {
+      if($scope.acceptedterms) {
+        $scope.userdata.id    = oauthdata.facebook.id;
+        $scope.userdata.name  = oauthdata.facebook.displayName;
+        $scope.userdata.email = oauthdata.facebook.email;
+        $scope.userdata.token = oauthdata.facebook.accessToken;
+
+        Login($scope.userdata);
+        // redirect home
+      }
+    }).catch(function(error) {
+      console.error('Authentication failed:', error);
+      $scope.loginerror = true;
     });
   };
 
 })
 
 
-.controller('AppCtrl', function($scope) {
-
-  $scope.user = {
-    fbid: '10152357995965379',
-    username: 'Jose'
-  };
-
-  $scope.listid = null;
-
-  $scope.noitems = false;
-})
-
-
 .controller('HomeCtrl', function($scope, $state) {
 
   $scope.goToList = function(listid) {
-    $scope.listid = listid;
+    $scope.userdata.listid = listid;
     $state.go('app.products');
   };
 

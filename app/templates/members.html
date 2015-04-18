@@ -5,7 +5,7 @@
     </div>
 
     <div class="inner-menu">
-      <a href="#/app/products/{{listid}}" >LIST</a>
+      <a href="#/app/products/{{userdata.listid}}" >LIST</a>
       <a href="#" class="active">MEMBERS</a>
     </div>
 
@@ -26,7 +26,7 @@
       </ion-list>
     </div>
 
-    <div class="no-items" ng-show="noitems">
+    <div class="no-items" ng-show="userdata.noitems">
       You can add your friends to this list by clicking the ‘ADD’ buttton below
     </div>
 
