@@ -24,7 +24,7 @@ angular.module('IOU.directives', [])
       }
 
       if(attrs.source) {
-        scope.$watch('search.value', function (newValue, oldValue) {
+        scope.$watch('search.value', function (newValue) {
           if(newValue.length > attrs.minLength) {
             scope.getData({str: newValue}).then(function (results) {
               scope.model = results;

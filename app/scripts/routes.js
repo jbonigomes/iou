@@ -105,7 +105,7 @@ angular.module('IOU.routes', [])
         controller: 'AddMemberCtrl'
       }
     }
-  })
+  });
 
   $urlRouterProvider.otherwise('/app/home');
 });

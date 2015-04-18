@@ -3,7 +3,7 @@
 angular.module('IOU.controllers', [])
 
 
-.controller('LoginCtrl', function($scope, $ionicModal) {
+.controller('LoginCtrl', function($scope, $ionicModal, $firebaseAuth, $cordovaOauth, iouref) {
   $ionicModal.fromTemplateUrl('templates/terms_modal.html', {
     scope: $scope
   }).then(function(modal) {
@@ -33,28 +33,27 @@ angular.module('IOU.controllers', [])
   };
 
   $scope.acceptedterms = true;
+  $scope.loginerror = false;
 
-  var ref = new Firebase("https://josefirebaseseed.firebaseio.com/");
+  var auth = $firebaseAuth(iouref);
 
-  // prefer pop-ups, so we don't navigate away from the page
-  ref.authWithOAuthPopup("facebook", function(error, authData) {
-    console.log('doing fb');
-    if (error) {
-      console.log('err fb');
-      if (error.code === "TRANSPORT_UNAVAILABLE") {
-        // fall-back to browser redirects, and pick up the session
-        // automatically when we come back to the origin page
-        ref.authWithOAuthRedirect("google", function(error) { /* ... */ });
-      }
-    } else if (authData) {
-      console.log('success fb');
-      // user authenticated with Firebase
-    }
-  });
+  $scope.login = function() {
+    $cordovaOauth.facebook('379065752294307', ['email','user_friends']).then(function(result) {
+      auth.$authWithOAuthToken('facebook', result.access_token).then(function(authData) {
+        console.log(JSON.stringify(authData));
+        console.log('all good');
+      }, function(error) {
+        console.error('ERROR: ' + error);
+      });
+    }, function(error) {
+      console.log('ERROR: ' + error);
+    });
+  };
+
 })
 
 
-.controller('AppCtrl', function($scope, $state) {
+.controller('AppCtrl', function($scope) {
 
   $scope.user = {
     fbid: '10152357995965379',
@@ -67,7 +66,7 @@ angular.module('IOU.controllers', [])
 })
 
 
-.controller('HomeCtrl', function($scope) {
+.controller('HomeCtrl', function($scope, $state) {
 
   $scope.goToList = function(listid) {
     $scope.listid = listid;
@@ -169,7 +168,7 @@ angular.module('IOU.controllers', [])
 .controller('NewProductCtrl', function($scope, $ionicHistory) {
   $scope.goBack = function() {
     $ionicHistory.goBack();
-  }
+  };
 })
 
 
@@ -225,5 +224,5 @@ angular.module('IOU.controllers', [])
 
 
 .controller('NewListCtrl', function($scope) {
-
+  console.log($scope);
 });

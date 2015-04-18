@@ -1,7 +1,7 @@
 <ion-view view-title="Login">
   <ion-content>
     <div class="info">
-      <button class="button button-block button-positive login-button">
+      <button class="button button-block button-positive login-button" ng-click="login()">
         <i class="ion-social-facebook"></i> FACEBOOK
       </button>
       <label class="toggle toggle-balanced">
@@ -15,6 +15,12 @@
       </span>
       <div class="error" ng-hide="acceptedterms">
         you must accept the terms &amp; conditions to proceed
+      </div>
+      <div class="success" ng-hide="loginerror">
+        you are now logged in
+      </div>
+      <div class="error" ng-show="loginerror">
+        and error occured in your login, please try again
       </div>
     </div>
   </ion-content>
