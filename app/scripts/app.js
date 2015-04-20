@@ -13,7 +13,7 @@ angular.module('IOU', [
   'IOU.filters'
 ])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $state, $rootScope, $ionicListDelegate, Login) {
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -23,10 +23,14 @@ angular.module('IOU', [
     }
   });
 
-  // $rootScope.$on('$stateChangeStart', function (ev, to, toParams, from, fromParams) {
-  //   if($state.includes('login') && (storage.get('FbId') === undefined)) {
-  //     ev.preventDefault();
-  //     $state.go('login');
-  //   }
-  // });
+  $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+    var requireLogin = toState.data.requireLogin;
+
+    if(requireLogin && (!Login.isLoggedIn())) {
+      event.preventDefault();
+      $state.go('login');
+    }
+
+    $ionicListDelegate.closeOptionButtons();
+  });
 });

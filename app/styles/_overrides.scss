@@ -8,8 +8,20 @@
 
 .bar-footer {
   height: 60px;
+
+  .button {
+    font-weight: bold;
+  }
 }
 
 .has-footer {
   bottom: 60px;
+}
+
+.button.icon.ion-trash-a:before {
+  padding: 0 18px 1px 18px;
+}
+
+.button.icon.ion-edit:before {
+  padding: 0 16px 1px 16px; 
 }

@@ -5,7 +5,7 @@
         <i class="ion-social-facebook"></i> FACEBOOK
       </button>
       <label class="toggle toggle-balanced">
-        <input type="checkbox" ng-model="acceptedterms">
+        <input type="checkbox" ng-model="loginUIdata.acceptedterms">
           <div class="track">
           <div class="handle"></div>
         </div>
@@ -13,13 +13,10 @@
       <span class="accept-terms">
         accept <a href="" ng-click="openTermsModal()">terms & conditions</a>
       </span>
-      <div class="error" ng-hide="acceptedterms">
+      <div class="error" ng-hide="loginUIdata.acceptedterms">
         you must accept the terms &amp; conditions to proceed
       </div>
-      <div class="success" ng-show="loggedin">
-        you are now logged in
-      </div>
-      <div class="error" ng-show="loginerror">
+      <div class="error" ng-show="loginUIdata.loginerror">
         and error occured in your login, please try again
       </div>
     </div>

@@ -3,16 +3,15 @@
 angular.module('IOU.controllers', [])
 
 
-.controller('AppCtrl', function($scope) {
+.controller('LoginCtrl', function($scope, $ionicModal, $firebaseAuth, $cordovaOauth, $state, IOURef, Login) {
 
-  $scope.userdata = {
-    listid: null,
-    noitems: false
-  };
-})
+  var auth = $firebaseAuth(IOURef);
 
+  $scope.loginUIdata = {
+    loginerror: false,
+    acceptedterms: true
+  }
 
-.controller('LoginCtrl', function($scope, $ionicModal, $firebaseAuth, $cordovaOauth, IOURef, Login) {
   $ionicModal.fromTemplateUrl('templates/terms_modal.html', {
     scope: $scope
   }).then(function(modal) {
@@ -41,83 +40,161 @@ angular.module('IOU.controllers', [])
     $scope.privacymodal.show();
   };
 
-  $scope.acceptedterms = true;
-  $scope.loginerror = false;
-  $scope.loggedin = false;
-
-  var auth = $firebaseAuth(IOURef);
-
   // must set this guy in the facebook app http://localhost/callback
   // $scope.login = function() {
-  //   $cordovaOauth.facebook('379065752294307', ['email','user_friends']).then(function(result) {
-  //     auth.$authWithOAuthToken('facebook', result.access_token).then(function(authData) {
-  //       console.log(JSON.stringify(authData));
-  //       console.log('all good');
-  //       $scope.loggedin = true;
+  //   if($scope.loginUIdata.acceptedterms) {
+  //     $cordovaOauth.facebook('379065752294307', ['email','user_friends']).then(function(result) {
+  //       auth.$authWithOAuthToken('facebook', result.access_token).then(function(authData) {
+  //         var userdata = {
+  //           id: oauthdata.facebook.id,
+  //           name: oauthdata.facebook.displayName,
+  //           email: oauthdata.facebook.email,
+  //           token: oauthdata.facebook.accessToken
+  //         };
+
+  //         Login.login(userdata);
+
+  //         $state.go('app.home');
+  //       }, function(error) {
+  //         $scope.loginUIdata.loginerror = true;
+  //       });
   //     }, function(error) {
-  //       console.error('ERROR: ' + error);
+  //       $scope.loginUIdata.loginerror = true;
   //     });
-  //   }, function(error) {
-  //     console.log('ERROR: ' + error);
-  //   });
+  //   }
   // };
 
   // must set this bad boy on facebook to https://auth.firebase.com/v2/ioutest/auth/facebook/callback
   $scope.login = function () {
-    auth.$authWithOAuthPopup('facebook', { scope: 'email,user_friends' }).then(function(oauthdata) {
-      if($scope.acceptedterms) {
-        $scope.userdata.id    = oauthdata.facebook.id;
-        $scope.userdata.name  = oauthdata.facebook.displayName;
-        $scope.userdata.email = oauthdata.facebook.email;
-        $scope.userdata.token = oauthdata.facebook.accessToken;
 
-        Login($scope.userdata);
-        // redirect home
-      }
-    }).catch(function(error) {
-      console.error('Authentication failed:', error);
-      $scope.loginerror = true;
-    });
+    if($scope.loginUIdata.acceptedterms === true) {
+      auth.$authWithOAuthPopup('facebook', { scope: 'email,user_friends' }).then(function(oauthdata) {
+        var userdata = {
+          id: oauthdata.facebook.id,
+          name: oauthdata.facebook.displayName,
+          email: oauthdata.facebook.email,
+          token: oauthdata.facebook.accessToken
+        };
+
+        Login.login(userdata);
+
+        $state.go('app.home');
+      }).catch(function(error) {
+        $scope.loginUIdata.loginerror = true;
+      });
+    }
   };
 
 })
 
 
-.controller('HomeCtrl', function($scope, $state) {
+.controller('AppCtrl', function($scope, localStorageService, Login) {
 
-  $scope.goToList = function(listid) {
-    $scope.userdata.listid = listid;
+  $scope.userdata = {
+    listid: null,
+    noitems: true,
+    showhomeicon: false,
+    id: localStorageService.get('userId'),
+    name: localStorageService.get('userName'),
+    token: localStorageService.get('userToken'),
+    email: localStorageService.get('userEmail')
+  };
+
+  $scope.logout = function() {
+    Login.logout();
+    window.location.reload();
+  };
+})
+
+
+.controller('HomeCtrl', function($scope, $state, $firebaseArray, IOURef, ListsWithTotal) {
+
+  $scope.userdata.showhomeicon = false;
+
+  $scope.goToList = function(listId) {
+    $scope.userdata.listid = listId;
     $state.go('app.products');
   };
 
-  $scope.lists = [{
-    id: 1,
-    title: 'BBQ on Sunday',
-    total: 10,
-    type: 'negative-total',
-    image: 'bag'
-  },{
-    id: 2,
-    title: 'Tesco\'s Groceries',
-    total: 20,
-    type: 'positive-total',
-    image: 'book'
-  },{
-    id: 3,
-    title: 'Households',
-    total: 0,
-    type: 'neutral-total',
-    image: 'bookshelf'
-  }];
+  $scope.goToNew = function() {
+    $state.go('app.newlist');
+  }
 
-  $scope.total = {
-    value: 10,
-    type: 'positive-total'
+  $scope.goToEdit = function(listId) {
+    $state.go('app.editlist', { listid: listId });
   };
+
+  $scope.delete = function(listId) {
+    IOURef.child('lists').child(listId).remove();
+    $scope.refreshList();
+  };
+
+  $scope.refreshList = function() {
+    ListsWithTotal(IOURef.child('lists')).$loaded().then(function(lists) {
+      $scope.lists = lists.withTotals();
+      $scope.$broadcast('scroll.refreshComplete');
+      
+      if($scope.lists.lists.length > 0) {
+        $scope.userdata.noitems = false;
+      }
+    });
+  };
+
+  $scope.refreshList();
 })
 
 
-.controller('ProductsCtrl', function($scope, $ionicModal) {
+.controller('NewListCtrl', function($scope, $state, IOURef) {
+
+  $scope.userdata.showhomeicon = true;
+  $scope.list = { name: '', image: 'bag', error: false };
+
+  $scope.submit = function() {
+    if($scope.list.name === '') {
+      $scope.list.error = true;
+    }
+    else {
+      var newList = {
+        name: $scope.list.name,
+        image: $scope.list.image,
+        members: {}
+      };
+
+      newList.members[$scope.userdata.id] = true;
+
+      IOURef.child('lists').push(newList);
+
+      $state.go('app.home');
+    }
+  }
+})
+
+
+.controller('EditListCtrl', function($scope, $state, $stateParams, $firebaseObject, IOURef) {
+
+  $scope.userdata.showhomeicon = true;
+
+  var listref = IOURef.child('lists').child($stateParams.listid);
+
+  $firebaseObject(listref).$loaded().then(function(list) {
+    $scope.list = list;
+  });
+
+  $scope.submit = function() {
+    if($scope.list.name === '') {
+      $scope.list.error = true;
+    }
+    else {
+      $scope.list.$save();
+      $state.go('app.home');
+    }
+  }
+})
+
+
+.controller('ProductsCtrl', function($scope, $ionicModal, $stateParams, IOURef, $firebaseArray) {
+
+  $scope.userdata.showhomeicon = true;
 
   $ionicModal.fromTemplateUrl('templates/price.html', {
     scope: $scope
@@ -133,46 +210,23 @@ angular.module('IOU.controllers', [])
     $scope.modal.show();
   };
 
-  $scope.tobuy = [{
-    id: 1,
-    title: 'Potatoes'
-  },{
-    id: 2,
-    title: 'Carrots'
-  },{
-    id: 3,
-    title: 'Bananas'
-  }];
+  $scope.refreshList = function() {    
+    var ref = IOURef.child('lists').child($stateParams.listid);
 
-  $scope.bought = [{
-    id: 1,
-    title: 'Carrots',
-    owner: '10152357995965379',
-    price: 10,
-    date: 1412635438623,
-    amended: false
-  },{
-    id: 2,
-    title: 'Bananas',
-    owner: '10152357995965379',
-    price: 10,
-    date: 1412635438623,
-    amended: false
-  },{
-    id: 3,
-    title: 'Potatoes',
-    owner: '10152357995965379',
-    price: 10,
-    date: 1412635438623,
-    amended: true
-  },{
-    id: 4,
-    title: 'Apples',
-    owner: '10152357995965379',
-    price: 10,
-    date: 1412635438623,
-    amended: false
-  }];
+    $firebaseArray(ref.child('bought').orderByChild('date')).$loaded().then(function(products) {
+      $scope.bought = products.reverse();
+      $scope.userdata.noitems = false;
+      $scope.$broadcast('scroll.refreshComplete');
+    });
+
+    $firebaseArray(ref.child('tobuy')).$loaded().then(function(products) {
+      $scope.tobuy = products;
+      $scope.userdata.noitems = false;
+      $scope.$broadcast('scroll.refreshComplete');
+    });
+  };
+
+  $scope.refreshList();
 
   $scope.total = {
     value: 10,
@@ -182,7 +236,10 @@ angular.module('IOU.controllers', [])
 })
 
 
-.controller('NewProductCtrl', function($scope, $ionicHistory) {
+.controller('NewProductCtrl', function($scope) {
+
+  $scope.userdata.showhomeicon = true;
+
   $scope.goBack = function() {
     $ionicHistory.goBack();
   };
@@ -190,6 +247,9 @@ angular.module('IOU.controllers', [])
 
 
 .controller('EditProductCtrl', function($scope) {
+  
+  $scope.userdata.showhomeicon = true;
+
   $scope.product = {
     id: 1,
     title: 'Carrots',
@@ -202,6 +262,9 @@ angular.module('IOU.controllers', [])
 
 
 .controller('MembersCtrl', function($scope) {
+  
+  $scope.userdata.showhomeicon = true;
+
   $scope.members = [{
     name: 'Nik',
     fbid: '10152357995965379',
@@ -227,6 +290,9 @@ angular.module('IOU.controllers', [])
 
 
 .controller('AddMemberCtrl', function($scope) {
+
+  $scope.userdata.showhomeicon = true;
+
   $scope.members = [{
     name: 'Nik',
     fbid: '10152357995965379'
@@ -237,9 +303,4 @@ angular.module('IOU.controllers', [])
     name: 'Gabe',
     fbid: '10152357995965379'
   }];
-})
-
-
-.controller('NewListCtrl', function($scope) {
-  console.log($scope);
 });

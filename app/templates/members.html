@@ -12,8 +12,8 @@
     <div class="list">
       <ion-list>
         <ion-item class="item-content lists-list members-list">
-          <img ng-src="https://graph.facebook.com/{{user.fbid}}/picture">
-          <span>{{ user.username }}</span>
+          <img ng-src="https://graph.facebook.com/{{userdata.id}}/picture">
+          <span>{{ userdata.name }}</span>
         </ion-item>
         <ion-item ng-repeat="member in members"
                   class="item-content lists-list members-list">

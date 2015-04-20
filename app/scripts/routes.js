@@ -9,14 +9,20 @@ angular.module('IOU.routes', [])
   .state('login', {
     url: '/login',
     templateUrl: 'templates/login.html',
-    controller: 'LoginCtrl'
+    controller: 'LoginCtrl',
+    data: {
+      requireLogin: false
+    }
   })
 
   .state('app', {
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
-    controller: 'AppCtrl'
+    controller: 'AppCtrl',
+    data: {
+      requireLogin: true
+    }
   })
 
   .state('app.home', {
@@ -35,6 +41,16 @@ angular.module('IOU.routes', [])
       'menuContent': {
         templateUrl: 'templates/new_list.html',
         controller: 'NewListCtrl'
+      }
+    }
+  })
+
+  .state('app.editlist', {
+    url: '/home/edit/:listid',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/new_list.html',
+        controller: 'EditListCtrl'
       }
     }
   })

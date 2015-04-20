@@ -3,7 +3,7 @@
     <ion-content>
 
       <div class="list">
-        <label class="item item-input">
+        <label class="item item-input" ng-class="{labelerror: list.error}">
           <i class="icon ion-android-book placeholder-icon"></i>
           <input type="text" placeholder="List Name" ng-model="list.name" required>
         </label>
@@ -100,7 +100,7 @@
 
     </ion-content>
     <ion-footer-bar>
-      <button class="button button-block button-positive">
+      <button class="button button-block button-positive" ng-click="submit()">
         SAVE
       </button>
     </ion-footer-bar>

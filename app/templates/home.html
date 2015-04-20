@@ -1,8 +1,11 @@
 <ion-view view-title="IOU">
   <ion-content>
 
-    <div class="overviewprice {{total.type}}">
-      {{ total.value | currency:'£':2 }}
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="refreshList()">
+    </ion-refresher>
+
+    <div class="overviewprice {{lists.type}}">
+      {{ lists.value | currency:'£':2 }}
     </div>
 
     <div class="no-items" ng-show="userdata.noitems">
@@ -15,20 +18,22 @@
       </div>
 
       <ion-list can-swipe="true">
-        <ion-item ng-repeat="item in lists | filter:search.value"
-                  href="#/app/products/{{item.id}}"
+        <ion-item ng-repeat="item in lists.lists | filter:search.value"
+                  href="#/app/products/{{item.data.$id}}"
                   class="item-content lists-list">
 
-          <img src="images/log_{{item.image}}.png">
-          <span>{{ item.title }}</span>
+          <img src="images/log_{{item.data.image}}.png">
+          <span>{{ item.data.name }}</span>
           <span class="pricetag {{item.type}}">
             {{ item.total | currency:'£':2 }}
           </span>
 
-          <ion-option-button class="button-assertive icon ion-trash-a">
+          <ion-option-button class="button-assertive icon ion-trash-a"
+                             ng-click="delete(item.data.$id)">
           </ion-option-button>
 
-          <ion-option-button class="button-positive icon ion-edit">
+          <ion-option-button class="button-positive icon ion-edit"
+                             ng-click="goToEdit(item.data.$id)">
           </ion-option-button>
 
         </ion-item>
@@ -36,8 +41,8 @@
     </div>
   </ion-content>
   <ion-footer-bar>
-    <a href="#/app/home/new" class="button button-block button-positive">
+    <button class="button button-block button-positive" ng-click="goToNew()">
       NEW
-    </a>
+    </button>
   </ion-footer-bar>
 </ion-view>
