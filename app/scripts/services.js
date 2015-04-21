@@ -75,6 +75,7 @@ angular.module('IOU.services', [])
         if(GenericServices.membersToArr(list.members).indexOf(currUser) >= 0) {
 
           angular.forEach(list.bought, function(product) {
+
             if(currUser === product.owner) {
               total      = parseFloat(total) + parseFloat(product.price);
               innertotal = parseFloat(innertotal) + parseFloat(product.price);

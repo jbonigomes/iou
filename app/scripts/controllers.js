@@ -109,6 +109,8 @@ angular.module('IOU.controllers', [])
 
 .controller('HomeCtrl', function($scope, $state, $firebaseArray, IOURef, ListsWithTotal) {
 
+  var watcher = $firebaseArray(IOURef);
+
   $scope.userdata.showhomeicon = false;
 
   $scope.goToList = function(listId) {
@@ -126,11 +128,11 @@ angular.module('IOU.controllers', [])
 
   $scope.delete = function(listId) {
     IOURef.child('lists').child(listId).remove();
-    $scope.refreshList();
   };
 
   $scope.refreshList = function() {
-    ListsWithTotal(IOURef.child('lists')).$loaded().then(function(lists) {
+    ListsWithTotal(IOURef.child('lists')).$loaded(function(lists) {
+
       $scope.lists = lists.withTotals();
       $scope.$broadcast('scroll.refreshComplete');
       
@@ -141,6 +143,8 @@ angular.module('IOU.controllers', [])
   };
 
   $scope.refreshList();
+
+  watcher.$watch(function() { $scope.refreshList(); });
 })
 
 
