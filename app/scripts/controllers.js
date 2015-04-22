@@ -64,7 +64,8 @@ angular.module('IOU.controllers', [])
   //   }
   // };
 
-  // must set this bad boy on facebook to https://auth.firebase.com/v2/ioutest/auth/facebook/callback
+  // must set this bad boy on facebook to
+  // https://auth.firebase.com/v2/ioutest/auth/facebook/callback
   $scope.login = function () {
 
     if($scope.loginUIdata.acceptedterms === true) {
@@ -112,11 +113,7 @@ angular.module('IOU.controllers', [])
   var watcher = $firebaseArray(IOURef);
 
   $scope.userdata.showhomeicon = false;
-
-  $scope.goToList = function(listId) {
-    $scope.userdata.listid = listId;
-    $state.go('app.products');
-  };
+  $scope.userdata.noitems = true;
 
   $scope.goToNew = function() {
     $state.go('app.newlist');
@@ -134,7 +131,6 @@ angular.module('IOU.controllers', [])
     ListsWithTotal(IOURef.child('lists')).$loaded(function(lists) {
 
       $scope.lists = lists.withTotals();
-      $scope.$broadcast('scroll.refreshComplete');
       
       if($scope.lists.lists.length > 0) {
         $scope.userdata.noitems = false;
@@ -196,9 +192,19 @@ angular.module('IOU.controllers', [])
 })
 
 
-.controller('ProductsCtrl', function($scope, $ionicModal, $stateParams, IOURef, $firebaseArray) {
+.controller('ProductsCtrl', function($scope, $ionicModal, $stateParams, IOURef, $firebaseArray, $firebaseObject, BoughtProducts) {
 
+  var watcher = $firebaseArray(IOURef);
+
+  $scope.userdata.listid = $stateParams.listid;
   $scope.userdata.showhomeicon = true;
+  $scope.userdata.noitems = true;
+
+  $scope.product = {
+    error: false,
+    price: null,
+    id: null
+  }
 
   $ionicModal.fromTemplateUrl('templates/price.html', {
     scope: $scope
@@ -210,48 +216,104 @@ angular.module('IOU.controllers', [])
     $scope.modal.hide();
   };
 
-  $scope.openModal = function() {
+  $scope.openModal = function(tobuyid) {
     $scope.modal.show();
+    $scope.product.id = tobuyid;
+  };
+
+  $scope.buyitem = function() {
+
+    var price = $scope.product.price;
+
+    if(isNaN(price) || price === null || price === '') {
+      $scope.product.error = true;
+    }
+    else {
+
+      var baseref  = IOURef.child('lists').child($scope.userdata.listid);
+      var tobuyref = baseref.child('tobuy').child($scope.product.id);
+
+      $firebaseObject(tobuyref).$loaded().then(function(tobuy) {
+
+        var tobuyname = tobuy.name;
+
+        var newproduct = {
+          amended: false,
+          date: new Date().getTime(),
+          name: tobuyname,
+          owner: $scope.userdata.id,
+          price: $scope.product.price
+        };
+
+        baseref.child('bought').push(newproduct);
+        tobuyref.remove();
+
+        $scope.product = {
+          error: false,
+          price: null,
+          id: null
+        };
+
+        $scope.closeModal();
+
+      });
+    }
   };
 
   $scope.refreshList = function() {    
     var ref = IOURef.child('lists').child($stateParams.listid);
 
-    $firebaseArray(ref.child('bought').orderByChild('date')).$loaded().then(function(products) {
+    BoughtProducts(ref.child('bought').orderByChild('date')).$loaded().then(function(products) {
       $scope.bought = products.reverse();
-      $scope.userdata.noitems = false;
-      $scope.$broadcast('scroll.refreshComplete');
-    });
 
-    $firebaseArray(ref.child('tobuy')).$loaded().then(function(products) {
-      $scope.tobuy = products;
-      $scope.userdata.noitems = false;
-      $scope.$broadcast('scroll.refreshComplete');
+      if($scope.bought.length > 0) {
+        $scope.userdata.noitems = false;
+      }
+
+      $firebaseArray(ref.child('tobuy').orderByChild('date')).$loaded().then(function(productstobuy) {
+        $scope.tobuy = productstobuy.reverse();
+
+        if($scope.tobuy.length > 0) {
+          $scope.userdata.noitems = false;
+        }
+
+      });
     });
   };
 
   $scope.refreshList();
 
-  $scope.total = {
-    value: 10,
-    type: 'positive-total'
-  };
-
+  watcher.$watch(function() { $scope.refreshList(); });
 })
 
 
-.controller('NewProductCtrl', function($scope) {
+.controller('NewProductCtrl', function($scope, $state, IOURef) {
 
   $scope.userdata.showhomeicon = true;
+  $scope.product = {
+    name: '',
+    error: false
+  };
 
-  $scope.goBack = function() {
-    $ionicHistory.goBack();
+  $scope.submit = function() {
+    if($scope.product.name === '') {
+      $scope.product.error = true;
+    }
+    else {
+      var tobuy = {
+        name: $scope.product.name,
+        date: new Date().getTime(),
+      };
+
+      IOURef.child('lists').child($scope.userdata.listid).child('tobuy').push(tobuy);
+      $state.go('app.products', { listid: $scope.userdata.listid });
+    }
   };
 })
 
 
 .controller('EditProductCtrl', function($scope) {
-  
+
   $scope.userdata.showhomeicon = true;
 
   $scope.product = {

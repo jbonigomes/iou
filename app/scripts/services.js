@@ -105,4 +105,34 @@ angular.module('IOU.services', [])
   return function(listRef) {
     return new ListWithTotal(listRef);
   }
+})
+
+
+.factory('BoughtProducts', function($firebaseArray, GenericServices, localStorageService) {
+
+  var BoughtProducts = $firebaseArray.$extend({
+    total: function() {
+      var total    = 0;
+      var currUser = localStorageService.get('userId');
+
+      angular.forEach(this.$list, function(product) {
+
+        if(currUser === product.owner) {
+          total = parseFloat(total) + parseFloat(product.price);
+        }
+        else {
+          total = parseFloat(total) - parseFloat(product.price);
+        }
+      });
+
+      return {
+        value: Math.abs(total),
+        type: GenericServices.priceType(total)
+      };
+    }
+  });
+
+  return function(listRef) {
+    return new BoughtProducts(listRef);
+  }
 });

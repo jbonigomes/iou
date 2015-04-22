@@ -6,18 +6,16 @@
     </div>
   </ion-header-bar>
   <ion-content>
-    <form ng-submit="doLogin()">
-      <div class="list">
-        <label class="item item-input">
+    <div class="list">
+      <label class="item item-input" ng-class="{labelerror: product.error}">
         <i class="icon ion-cash placeholder-icon"></i>
         <input type="text" placeholder="0.00" ng-model="product.price" required>
       </label>
-        <label class="item">
-          <button class="button button-block button-positive" type="submit">
-            BUY
-          </button>
-        </label>
-      </div>
-    </form>
+      <label class="item">
+        <button class="button button-block button-positive" ng-click="buyitem()">
+          BUY
+        </button>
+      </label>
+    </div>
   </ion-content>
 </ion-modal-view>
