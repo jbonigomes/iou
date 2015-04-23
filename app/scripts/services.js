@@ -31,7 +31,7 @@ angular.module('IOU.services', [])
 
       return membersArr;
     }
-  }
+  };
 })
 
 .factory('Login', function(localStorageService, IOURef) {
@@ -104,8 +104,50 @@ angular.module('IOU.services', [])
 
   return function(listRef) {
     return new ListWithTotal(listRef);
-  }
+  };
 })
+
+
+.factory('Facebook', function (ENV, $http) {
+
+  var Facebook = {
+    getPerson: function(fbid, token) {
+      return $http.get(ENV.facebookEndpoint + fbid + '?access_token=' + token);
+    },
+
+    getFriends: function (fbid, token) {
+      return $http.get(ENV.facebookEndpoint + fbid + '/friends?access_token=' + token);
+    }
+  };
+
+  return Facebook;
+
+})
+
+
+// .factory('ListMembers', function($firebaseArray, $firebaseObject, $q, IOURef) {
+
+//   var ListMembers = $firebaseArray.$extend({
+//     fullmembers: function() {
+//       var fulllist = [];
+
+//       angular.forEach(this.$list, function(member, key) {
+//         console.log('before if');
+//         if(member) {
+//           console.log('after if');
+//           fulllist.push($firebaseObject(IOURef.child('users').child(key)).$loaded());
+//         }
+//       });
+
+//       return fulllist;
+//     }
+//   });
+
+//   return function(listRef) {
+//     return new ListMembers(listRef);
+//   };
+
+// })
 
 
 .factory('BoughtProducts', function($firebaseArray, GenericServices, localStorageService) {
@@ -134,5 +176,5 @@ angular.module('IOU.services', [])
 
   return function(listRef) {
     return new BoughtProducts(listRef);
-  }
+  };
 });

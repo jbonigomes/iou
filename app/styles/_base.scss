@@ -1,3 +1,18 @@
+.m-l-10 {
+  margin-left: 10px;
+}
+
+.select-member {
+  top: 15px;
+  right: 10px;
+  border: none;
+  display: block;
+  font-size: 24px;
+  cursor: pointer;
+  background: none;
+  position: absolute;
+}
+
 .error {
   color: $clr_red;
   text-align: center;

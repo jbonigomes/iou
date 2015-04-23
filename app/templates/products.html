@@ -1,6 +1,9 @@
 <ion-view view-title="IOU">
   <ion-content>
 
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="refreshList()">
+    </ion-refresher>
+
     <div class="overviewprice {{bought.total().type}}">
       {{ bought.total().value | currency:'£':2 }}
     </div>
@@ -27,7 +30,7 @@
 
         <div class="item item-divider">Bought items</div>
         <ion-item ng-repeat="item in bought"
-                  href="#/app/editproduct/{{item.id}}"
+                  href="#/app/editproduct/{{item.$id}}"
                   class="item-content lists-list products-list">
 
           <img ng-src="https://graph.facebook.com/{{item.owner}}/picture">

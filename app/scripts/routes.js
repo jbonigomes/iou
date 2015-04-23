@@ -103,6 +103,16 @@ angular.module('IOU.routes', [])
     }
   })
 
+  .state('app.assignmember', {
+    url: '/assignmember/:productid',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/assign_member.html',
+        controller: 'AssignMemberCtrl'
+      }
+    }
+  })
+
   .state('app.members', {
     url: '/members/:listid',
     views: {

@@ -44,7 +44,7 @@ module.exports = function (grunt) {
           ENV: {
             name: 'development',
             apiEndpoint: 'https://ioutest.firebaseio.com/',
-            facebookEndpoint: 'https://graph.facebook.com/v2.0/'
+            facebookEndpoint: 'https://graph.facebook.com/v2.3/'
           }
         }
       },
@@ -53,7 +53,7 @@ module.exports = function (grunt) {
           ENV: {
             name: 'production',
             apiEndpoint: 'https://josefirebaseseed.firebaseio.com/',
-            facebookEndpoint: 'https://graph.facebook.com/v2.0/'
+            facebookEndpoint: 'https://graph.facebook.com/v2.3/'
           }
         }
       }

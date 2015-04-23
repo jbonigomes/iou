@@ -1,5 +1,8 @@
 <ion-view view-title="IOU">
   <ion-content>
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="refreshList()">
+    </ion-refresher>
+
     <div class="overviewprice {{total.type}}">
       {{ total.value | currency:'£':2 }}
     </div>

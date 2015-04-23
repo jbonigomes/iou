@@ -135,6 +135,8 @@ angular.module('IOU.controllers', [])
       if($scope.lists.lists.length > 0) {
         $scope.userdata.noitems = false;
       }
+
+      $scope.$broadcast('scroll.refreshComplete');
     });
   };
 
@@ -225,7 +227,7 @@ angular.module('IOU.controllers', [])
 
     var price = $scope.product.price;
 
-    if(isNaN(price) || price === null || price === '') {
+    if(isNaN(price) || price === null || price === '' || price < 0) {
       $scope.product.error = true;
     }
     else {
@@ -277,6 +279,8 @@ angular.module('IOU.controllers', [])
           $scope.userdata.noitems = false;
         }
 
+        $scope.$broadcast('scroll.refreshComplete');
+
       });
     });
   };
@@ -312,17 +316,122 @@ angular.module('IOU.controllers', [])
 })
 
 
-.controller('EditProductCtrl', function($scope) {
+.controller('EditProductCtrl', function($scope, $state, $stateParams, IOURef, Facebook, $firebaseObject) {
+
+  var prodref = IOURef
+    .child('lists')
+    .child($scope.userdata.listid)
+    .child('bought')
+    .child($stateParams.productid);
+
+  $scope.formerrors = {
+    name: false,
+    price: false
+  };
 
   $scope.userdata.showhomeicon = true;
+  
+  $firebaseObject(prodref).$loaded().then(function(product) {
 
-  $scope.product = {
-    id: 1,
-    title: 'Carrots',
-    owner: '10152357995965379',
-    price: 10,
-    date: 1412635438623,
-    amended: false
+    $scope.product = product;
+
+    Facebook.getPerson(product.owner, $scope.userdata.token).success(function(user) {
+      $scope.username = user.name;
+    });
+  });
+
+  $scope.submit = function() {
+
+    var price = $scope.product.price;
+    var name  = $scope.product.name;
+
+    if(name === '' || name === null || name === undefined) {
+      $scope.formerrors.name = true;
+    }
+
+    if(isNaN(price) || price === null || price === '' || price < 0) {
+      $scope.formerrors.price = true;
+    }
+
+    if(!$scope.formerrors.name && !$scope.formerrors.price) {
+
+      var updatedproduct = $firebaseObject(prodref);
+
+      updatedproduct.name    = $scope.product.name;
+      updatedproduct.date    = new Date().getTime();
+      updatedproduct.owner   = $scope.product.owner;
+      updatedproduct.price   = $scope.product.price;
+      updatedproduct.amended = true;
+
+      updatedproduct.$save().then(function() {
+        $state.go('app.products', { listid: $scope.userdata.listid });
+      });
+    }
+  };
+
+  $scope.fetchMembers = function() {
+    $state.go('app.assignmember', { productid: $stateParams.productid });
+  };
+})
+
+
+.controller('AssignMemberCtrl', function($scope, $state, $stateParams, IOURef, Facebook, $firebaseArray, $firebaseObject, $q) {
+
+  var baseref = IOURef
+    .child('lists')
+    .child($scope.userdata.listid);
+
+  var membersref = baseref
+    .child('members');
+
+  var productref = baseref
+    .child('bought')
+    .child($stateParams.productid);
+
+  $firebaseArray(membersref).$loaded().then(function(members) {
+
+    var memberIds = [];
+
+    angular.forEach(members, function(member) {
+      if(member.$value) {
+        memberIds.push(member.$id);
+      }
+    });
+
+    $scope.members = [{
+      name: $scope.userdata.name,
+      id: $scope.userdata.id
+    }];
+
+    Facebook.getFriends($scope.userdata.id, $scope.userdata.token).success(function(friends) {
+      angular.forEach(friends.data, function(friend) {
+        if(memberIds.indexOf(friend.id) >= 0) {
+          $scope.members.push(friend);
+        }
+      });
+    });
+  });
+
+  $scope.selectMember = function(memberid) {
+
+    $firebaseObject(productref).$loaded().then(function(product) {
+
+      var updatedproduct = $firebaseObject(productref);
+
+      updatedproduct.name    = product.name;
+      updatedproduct.date    = new Date().getTime();
+      updatedproduct.owner   = memberid;
+      updatedproduct.price   = product.price;
+      updatedproduct.amended = true;
+
+      updatedproduct.$save().then(function() {
+        $scope.goBack();
+      });
+    });
+  };
+
+  $scope.goBack = function() {
+    $state.go('app.editproduct', { productid: $stateParams.productid });
   };
 })
 
