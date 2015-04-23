@@ -20,7 +20,7 @@
         </ion-item>
         <ion-item ng-repeat="member in members"
                   class="item-content lists-list members-list">
-          <img ng-src="https://graph.facebook.com/{{member.fbid}}/picture">
+          <img ng-src="https://graph.facebook.com/{{member.id}}/picture">
           <span>{{ member.name }}</span>
           <span class="pricetag {{member.type}}">
             {{ member.total | currency:'£':2 }}

@@ -436,11 +436,40 @@ angular.module('IOU.controllers', [])
 })
 
 
-.controller('MembersCtrl', function($scope) {
+.controller('MembersCtrl', function($scope, IOURef, $firebaseArray, Facebook) {
   
   $scope.userdata.showhomeicon = true;
+  $scope.userdata.noitems = true;
+  $scope.members = [];
 
-  $scope.members = [{
+  $scope.userdata.listid = '-Jnb0iVYosz3OctxAe9Q';
+
+  var membersref = IOURef
+    .child('lists')
+    .child($scope.userdata.listid)
+    .child('members');
+
+  $firebaseArray(membersref).$loaded().then(function(members) {
+
+    var memberIds = [];
+
+    angular.forEach(members, function(member) {
+      if(member.$value) {
+        memberIds.push(member.$id);
+      }
+    });
+
+    Facebook.getFriends($scope.userdata.id, $scope.userdata.token).success(function(friends) {
+      angular.forEach(friends.data, function(friend) {
+        if(memberIds.indexOf(friend.id) >= 0) {
+          $scope.members.push(friend);
+          $scope.userdata.noitems = false;
+        }
+      });
+    });
+  });
+
+  $scope.memberssample = [{
     name: 'Nik',
     fbid: '10152357995965379',
     total: 10,
@@ -457,25 +486,63 @@ angular.module('IOU.controllers', [])
     type: 'neutral-total'
   }];
 
-  $scope.total = {
+  $scope.totalsample = {
     value: 10,
     type: 'positive-total'
   };
 })
 
 
-.controller('AddMemberCtrl', function($scope) {
+.controller('AddMemberCtrl', function($scope, $state, Facebook, IOURef, $firebaseArray, $firebaseObject) {
 
+  var membersref = IOURef
+    .child('lists')
+    .child($scope.userdata.listid)
+    .child('members');
+
+  $scope.userdata.noitems = false;
   $scope.userdata.showhomeicon = true;
 
-  $scope.members = [{
-    name: 'Nik',
-    fbid: '10152357995965379'
-  },{
-    name: 'Andy',
-    fbid: '10152357995965379'
-  },{
-    name: 'Gabe',
-    fbid: '10152357995965379'
-  }];
+  $scope.members = [];
+
+  $firebaseArray(membersref).$loaded().then(function(members) {
+
+    var memberIds = [$scope.userdata.id];
+
+    angular.forEach(members, function(member) {
+      if(member.$value) {
+        memberIds.push(member.$id);
+      }
+    });
+
+    Facebook.getFriends($scope.userdata.id, $scope.userdata.token).success(function(friends) {
+      angular.forEach(friends.data, function(friend) {
+        if(memberIds.indexOf(friend.id) < 0) {
+          $scope.members.push(friend);
+          $scope.userdata.noitems = false;
+        }
+      });
+    });
+  });
+
+  $scope.addMember = function(memberid) {
+
+    $firebaseArray(membersref).$loaded().then(function(members) {
+
+      var updatedmembers = $firebaseObject(membersref);
+
+      angular.forEach(members, function(member) {
+        if(member.$value) {
+          updatedmembers[member.$id] = true;
+        }
+      });
+
+      updatedmembers[memberid] = true;
+
+      updatedmembers.$save().then(function() {
+        $state.go('app.members', { listid: $scope.userdata.listid });        
+      });
+    });
+  };
+
 });
