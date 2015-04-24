@@ -125,29 +125,48 @@ angular.module('IOU.services', [])
 })
 
 
-// .factory('ListMembers', function($firebaseArray, $firebaseObject, $q, IOURef) {
+.factory('MembersWithTotal', function() {
 
-//   var ListMembers = $firebaseArray.$extend({
-//     fullmembers: function() {
-//       var fulllist = [];
+  return {
+    list: function(members, products, userid) {
 
-//       angular.forEach(this.$list, function(member, key) {
-//         console.log('before if');
-//         if(member) {
-//           console.log('after if');
-//           fulllist.push($firebaseObject(IOURef.child('users').child(key)).$loaded());
-//         }
-//       });
+      var usersthatboughtsomething = [];
 
-//       return fulllist;
-//     }
-//   });
+      // let's start getting the list total
+      var listtotal = 0;
 
-//   return function(listRef) {
-//     return new ListMembers(listRef);
-//   };
+      // since we are looping, we may as well get how much each user spent too
+      angular.forEach(products, function(product) {
+        listtotal += parseFloat(product.price);
 
-// })
+        if(usersthatboughtsomething[product.owner] === undefined) {
+          usersthatboughtsomething[product.owner] = parseFloat(product.price);
+        }
+        else {
+         usersthatboughtsomething[product.owner] += parseFloat(product.price);
+        }
+      });
+
+      // let's find the list average
+      var average = parseFloat(listtotal) / parseFloat(members.length);
+
+      // let's get the percentage nested in our final array
+      angular.forEach(members, function(member) {
+        // we have to cater for users that did not buy anything too
+        if(usersthatboughtsomething[member.data.id] === undefined) {
+          usersthatboughtsomething[member.data.id] = 0;
+        }
+
+        // if the guy spent more than the average, then he is a creditor
+        // if he spent less, he is a debtor
+        // otherwise he is even
+      });
+
+      console.log(usersthatboughtsomething);
+    }
+  };
+
+})
 
 
 .factory('BoughtProducts', function($firebaseArray, GenericServices, localStorageService) {

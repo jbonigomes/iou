@@ -436,52 +436,50 @@ angular.module('IOU.controllers', [])
 })
 
 
-.controller('MembersCtrl', function($scope, IOURef, $firebaseArray, Facebook) {
-  
+.controller('MembersCtrl', function($scope, IOURef, MembersWithTotal, $firebaseObject, Facebook, $q) {
+
   $scope.userdata.showhomeicon = true;
   $scope.userdata.noitems = true;
   $scope.members = [];
 
   $scope.userdata.listid = '-Jnb0iVYosz3OctxAe9Q';
 
-  var membersref = IOURef
+  var listref = IOURef
     .child('lists')
-    .child($scope.userdata.listid)
-    .child('members');
+    .child($scope.userdata.listid);
 
-  $firebaseArray(membersref).$loaded().then(function(members) {
+  $scope.refreshList = function() {
+    $firebaseObject(listref).$loaded().then(function(list) {
 
-    var memberIds = [];
+      var userswithnames = [];
 
-    angular.forEach(members, function(member) {
-      if(member.$value) {
-        memberIds.push(member.$id);
-      }
-    });
-
-    Facebook.getFriends($scope.userdata.id, $scope.userdata.token).success(function(friends) {
-      angular.forEach(friends.data, function(friend) {
-        if(memberIds.indexOf(friend.id) >= 0) {
-          $scope.members.push(friend);
-          $scope.userdata.noitems = false;
+      angular.forEach(list.members, function(member, key) {
+        if(member) {
+          userswithnames.push(Facebook.getPerson(key, $scope.userdata.token));
         }
       });
+
+      $q.all(userswithnames).then(function(members){
+        MembersWithTotal.list(members, list.bought, $scope.userdata.id);
+      });
     });
-  });
+  };
+
+  $scope.refreshList();
 
   $scope.memberssample = [{
     name: 'Nik',
-    fbid: '10152357995965379',
+    id: '10152357995965379',
     total: 10,
     type: 'positive-total'
   },{
     name: 'Andy',
-    fbid: '10152357995965379',
+    id: '10152357995965379',
     total: 10,
     type: 'negative-total'
   },{
     name: 'Gabe',
-    fbid: '10152357995965379',
+    id: '10152357995965379',
     total: 10,
     type: 'neutral-total'
   }];
