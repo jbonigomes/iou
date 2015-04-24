@@ -460,34 +460,13 @@ angular.module('IOU.controllers', [])
       });
 
       $q.all(userswithnames).then(function(members){
-        MembersWithTotal.list(members, list.bought, $scope.userdata.id);
+        $scope.members = MembersWithTotal.list(members, list.bought, $scope.userdata.id);
+        console.log($scope.members);
       });
     });
   };
 
   $scope.refreshList();
-
-  $scope.memberssample = [{
-    name: 'Nik',
-    id: '10152357995965379',
-    total: 10,
-    type: 'positive-total'
-  },{
-    name: 'Andy',
-    id: '10152357995965379',
-    total: 10,
-    type: 'negative-total'
-  },{
-    name: 'Gabe',
-    id: '10152357995965379',
-    total: 10,
-    type: 'neutral-total'
-  }];
-
-  $scope.totalsample = {
-    value: 10,
-    type: 'positive-total'
-  };
 })
 
 

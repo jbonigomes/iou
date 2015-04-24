@@ -125,17 +125,20 @@ angular.module('IOU.services', [])
 })
 
 
-.factory('MembersWithTotal', function() {
+.factory('MembersWithTotal', function(GenericServices) {
 
   return {
     list: function(members, products, userid) {
 
-      var usersthatboughtsomething = [];
+      var weight = 0;
+      var average = 0;
+      var listtotal = 0;
+      var totaloverspent = 0;
+      var memberswithtotals = [];
+      var usersthatboughtsomething = {};
 
       // let's start getting the list total
-      var listtotal = 0;
-
-      // since we are looping, we may as well get how much each user spent too
+      // since we are looping, we may as well get how much each user spent
       angular.forEach(products, function(product) {
         listtotal += parseFloat(product.price);
 
@@ -147,22 +150,117 @@ angular.module('IOU.services', [])
         }
       });
 
-      // let's find the list average
-      var average = parseFloat(listtotal) / parseFloat(members.length);
-
-      // let's get the percentage nested in our final array
+      // we have to cater for users that did not buy anything too
       angular.forEach(members, function(member) {
-        // we have to cater for users that did not buy anything too
         if(usersthatboughtsomething[member.data.id] === undefined) {
           usersthatboughtsomething[member.data.id] = 0;
         }
-
-        // if the guy spent more than the average, then he is a creditor
-        // if he spent less, he is a debtor
-        // otherwise he is even
       });
 
-      console.log(usersthatboughtsomething);
+      // let's find the list average
+      average = parseFloat(listtotal) / parseFloat(members.length);
+
+      // and the total overspent
+      angular.forEach(usersthatboughtsomething, function(value) {
+        if(value > average) {
+          totaloverspent += parseFloat(value) - parseFloat(average)
+        }
+      });
+
+      // we now need to know if the logged user is a debtor, a creditor or is even
+      // if the logged user is a creditor, then the debtors owe him money
+      if(usersthatboughtsomething[userid] > average) {
+
+        // from everything that has been overspent, the current user has
+        // overspent a percentage of it, we need to calculate that
+        weight = ((parseFloat(usersthatboughtsomething[userid]) - parseFloat(average)) * parseFloat(100)) / parseFloat(totaloverspent);
+
+        // we can now build our return array
+        angular.forEach(usersthatboughtsomething, function(value, key) {
+          // ignoring creditors, those who are even and the current logged user
+          if(key !== userid && value < average) {
+            var totaldebt = ((parseFloat(average) - parseFloat(value)) * parseFloat(weight)) / parseFloat(100);
+            var returnobj = {
+              id: key,
+              name: 'testname',
+              total: Math.abs(totaldebt),
+              type: 'negative-total'
+            };
+
+            memberswithtotals.push(returnobj);
+          }
+          else if(key !== userid) {
+            var returnobj = {
+              id: key,
+              name: 'testname',
+              total: 0,
+              type: 'neutral-total'
+            };
+
+            memberswithtotals.push(returnobj);
+          }
+        });
+      }
+      // if the logged user is a debtor, then he owes money to the creditors
+      else if (usersthatboughtsomething[userid] < average) {
+
+        var totaltopayback = parseFloat(average) - parseFloat(usersthatboughtsomething[userid]);
+
+        // we can now build our return array
+        angular.forEach(usersthatboughtsomething, function(value, key) {
+          // ignoring debtors, those who are even and the current logged user
+          if(key !== userid && value > average) {
+
+            // From the total to pay back, a debtor has to pay the due percentage
+            // for each of the creditors
+            weight = (parseFloat(value) * parseFloat(100)) / parseFloat(totaloverspent);
+
+            var totaldebt = (parseFloat(weight) * parseFloat(totaltopayback)) / parseFloat(100);
+            var returnobj = {
+              id: key,
+              name: 'testname',
+              total: Math.abs(totaldebt),
+              type: 'negative-total'
+            };
+
+            memberswithtotals.push(returnobj);
+          }
+          else if(key !== userid) {
+            var returnobj = {
+              id: key,
+              name: 'testname',
+              total: 0,
+              type: 'neutral-total'
+            };
+
+            memberswithtotals.push(returnobj);
+          }
+        });
+
+      }
+      // otherwise, he is even with everyone
+      else {
+        angular.forEach(usersthatboughtsomething, function(value, key) {
+          if(key !== userid) {
+            var returnobj = {
+              id: key,
+              name: 'testname',
+              total: 0,
+              type: 'neutral-total'
+            };
+
+            memberswithtotals.push(returnobj);
+          }
+        });
+      }
+
+      return {
+        members: memberswithtotals,
+        total: {
+          value: Math.abs(parseFloat(usersthatboughtsomething[userid]) - parseFloat(average)),
+          type: GenericServices.priceType(parseFloat(usersthatboughtsomething[userid]) - parseFloat(average))
+        }
+      };
     }
   };
 

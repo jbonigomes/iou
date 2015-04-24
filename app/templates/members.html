@@ -3,8 +3,8 @@
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="refreshList()">
     </ion-refresher>
 
-    <div class="overviewprice {{total.type}}">
-      {{ total.value | currency:'£':2 }}
+    <div class="overviewprice {{members.total.type}}">
+      {{ members.total.value | currency:'£':2 }}
     </div>
 
     <div class="inner-menu">
@@ -18,7 +18,7 @@
           <img ng-src="https://graph.facebook.com/{{userdata.id}}/picture">
           <span>{{ userdata.name }}</span>
         </ion-item>
-        <ion-item ng-repeat="member in members"
+        <ion-item ng-repeat="member in members.members"
                   class="item-content lists-list members-list">
           <img ng-src="https://graph.facebook.com/{{member.id}}/picture">
           <span>{{ member.name }}</span>
