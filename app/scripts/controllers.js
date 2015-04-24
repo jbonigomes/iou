@@ -94,7 +94,6 @@ angular.module('IOU.controllers', [])
   $scope.userdata = {
     listid: null,
     noitems: true,
-    showhomeicon: false,
     id: localStorageService.get('userId'),
     name: localStorageService.get('userName'),
     token: localStorageService.get('userToken'),
@@ -112,7 +111,6 @@ angular.module('IOU.controllers', [])
 
   var watcher = $firebaseArray(IOURef);
 
-  $scope.userdata.showhomeicon = false;
   $scope.userdata.noitems = true;
 
   $scope.goToNew = function() {
@@ -148,7 +146,6 @@ angular.module('IOU.controllers', [])
 
 .controller('NewListCtrl', function($scope, $state, IOURef) {
 
-  $scope.userdata.showhomeicon = true;
   $scope.list = { name: '', image: 'bag', error: false };
 
   $scope.submit = function() {
@@ -174,7 +171,6 @@ angular.module('IOU.controllers', [])
 
 .controller('EditListCtrl', function($scope, $state, $stateParams, $firebaseObject, IOURef) {
 
-  $scope.userdata.showhomeicon = true;
 
   var listref = IOURef.child('lists').child($stateParams.listid);
 
@@ -199,7 +195,6 @@ angular.module('IOU.controllers', [])
   var watcher = $firebaseArray(IOURef);
 
   $scope.userdata.listid = $stateParams.listid;
-  $scope.userdata.showhomeicon = true;
   $scope.userdata.noitems = true;
 
   $scope.product = {
@@ -293,7 +288,6 @@ angular.module('IOU.controllers', [])
 
 .controller('NewProductCtrl', function($scope, $state, IOURef) {
 
-  $scope.userdata.showhomeicon = true;
   $scope.product = {
     name: '',
     error: false
@@ -329,7 +323,6 @@ angular.module('IOU.controllers', [])
     price: false
   };
 
-  $scope.userdata.showhomeicon = true;
   
   $firebaseObject(prodref).$loaded().then(function(product) {
 
@@ -438,7 +431,6 @@ angular.module('IOU.controllers', [])
 
 .controller('MembersCtrl', function($scope, IOURef, MembersWithTotal, $firebaseObject, Facebook, $q) {
 
-  $scope.userdata.showhomeicon = true;
   $scope.userdata.noitems = true;
   $scope.members = [];
 
@@ -478,7 +470,6 @@ angular.module('IOU.controllers', [])
     .child('members');
 
   $scope.userdata.noitems = false;
-  $scope.userdata.showhomeicon = true;
 
   $scope.members = [];
 
