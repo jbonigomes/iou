@@ -4,8 +4,8 @@
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="refreshList()">
     </ion-refresher>
 
-    <div class="overviewprice {{bought.total().type}}">
-      {{ bought.total().value | currency:'£':2 }}
+    <div class="overviewprice {{bought.total(numberofmembers).type}}">
+      {{ bought.total(numberofmembers).value | currency:'£':2 }}
     </div>
 
     <div class="inner-menu">

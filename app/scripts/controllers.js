@@ -111,7 +111,6 @@ angular.module('IOU.controllers', [])
 
   var watcher = $firebaseArray(IOURef);
 
-  $scope.userdata.noitems = true;
 
   $scope.goToNew = function() {
     $state.go('app.newlist');
@@ -126,6 +125,9 @@ angular.module('IOU.controllers', [])
   };
 
   $scope.refreshList = function() {
+
+    $scope.userdata.noitems = true;
+
     ListsWithTotal(IOURef.child('lists')).$loaded(function(lists) {
 
       $scope.lists = lists.withTotals();
@@ -195,7 +197,6 @@ angular.module('IOU.controllers', [])
   var watcher = $firebaseArray(IOURef);
 
   $scope.userdata.listid = $stateParams.listid;
-  $scope.userdata.noitems = true;
 
   $scope.product = {
     error: false,
@@ -257,25 +258,33 @@ angular.module('IOU.controllers', [])
     }
   };
 
-  $scope.refreshList = function() {    
+  $scope.refreshList = function() {
+
+    $scope.userdata.noitems = true;
+
     var ref = IOURef.child('lists').child($stateParams.listid);
 
-    BoughtProducts(ref.child('bought').orderByChild('date')).$loaded().then(function(products) {
-      $scope.bought = products.reverse();
+    $firebaseArray(ref.child('members')).$loaded().then(function(members) {
 
-      if($scope.bought.length > 0) {
-        $scope.userdata.noitems = false;
-      }
+      $scope.numberofmembers = members.length;
 
-      $firebaseArray(ref.child('tobuy').orderByChild('date')).$loaded().then(function(productstobuy) {
-        $scope.tobuy = productstobuy.reverse();
+      BoughtProducts(ref.child('bought').orderByChild('date')).$loaded().then(function(products) {
+        $scope.bought = products.reverse();
 
-        if($scope.tobuy.length > 0) {
+        if($scope.bought.length > 0) {
           $scope.userdata.noitems = false;
         }
 
-        $scope.$broadcast('scroll.refreshComplete');
+        $firebaseArray(ref.child('tobuy').orderByChild('date')).$loaded().then(function(productstobuy) {
+          $scope.tobuy = productstobuy.reverse();
 
+          if($scope.tobuy.length > 0) {
+            $scope.userdata.noitems = false;
+          }
+
+          $scope.$broadcast('scroll.refreshComplete');
+
+        });
       });
     });
   };
@@ -431,16 +440,16 @@ angular.module('IOU.controllers', [])
 
 .controller('MembersCtrl', function($scope, IOURef, MembersWithTotal, $firebaseObject, Facebook, $q) {
 
-  $scope.userdata.noitems = true;
   $scope.members = [];
-
-  $scope.userdata.listid = '-Jnb0iVYosz3OctxAe9Q';
 
   var listref = IOURef
     .child('lists')
     .child($scope.userdata.listid);
 
   $scope.refreshList = function() {
+
+    $scope.userdata.noitems = true;
+
     $firebaseObject(listref).$loaded().then(function(list) {
 
       var userswithnames = [];
@@ -453,7 +462,10 @@ angular.module('IOU.controllers', [])
 
       $q.all(userswithnames).then(function(members){
         $scope.members = MembersWithTotal.list(members, list.bought, $scope.userdata.id);
-        console.log($scope.members);
+        if($scope.members.members.length > 0) {
+          $scope.userdata.noitems = false;
+        }
+        $scope.$broadcast('scroll.refreshComplete');
       });
     });
   };
@@ -469,7 +481,7 @@ angular.module('IOU.controllers', [])
     .child($scope.userdata.listid)
     .child('members');
 
-  $scope.userdata.noitems = false;
+  $scope.userdata.noitems = true;
 
   $scope.members = [];
 

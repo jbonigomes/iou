@@ -69,29 +69,41 @@ angular.module('IOU.services', [])
       var fullLists = [];
       var currUser  = localStorageService.get('userId');
 
+      // ok, let's loop through all lists throughout the app
       angular.forEach(this.$list, function(list) {
         var innertotal = 0;
+        var usertotal = 0;
 
+        // http://www.hacksparrow.com/javascript-get-object-size.html
+        var numberofmembers = Object.keys(list.members).length;
+
+        // we can only act upon the lists that we belong to
         if(GenericServices.membersToArr(list.members).indexOf(currUser) >= 0) {
 
+          // loop through all bought items in the list we have to hand
           angular.forEach(list.bought, function(product) {
 
+            // add up the total bought by the logged user
             if(currUser === product.owner) {
-              total      = parseFloat(total) + parseFloat(product.price);
-              innertotal = parseFloat(innertotal) + parseFloat(product.price);
+              usertotal += parseFloat(product.price);
             }
-            else {
-              total      = parseFloat(total) - parseFloat(product.price);
-              innertotal = parseFloat(innertotal) - parseFloat(product.price);
-            }
-          });
 
-          fullLists.push({
-            data: list,
-            total: Math.abs(innertotal),
-            type: GenericServices.priceType(innertotal)
+            // add up to the current list total
+            innertotal += parseFloat(product.price);
           });
         }
+
+        var average = parseFloat(innertotal) / parseFloat(numberofmembers);
+
+        // build the inner lists object
+        fullLists.push({
+          data: list,
+          total: Math.abs(parseFloat(usertotal) - parseFloat(average)),
+          type: GenericServices.priceType(parseFloat(usertotal) - parseFloat(average))
+        });
+
+        // and keep adding on to the 'all lists' total
+        total += parseFloat(usertotal) - parseFloat(average);
       });
 
       return {
@@ -270,23 +282,25 @@ angular.module('IOU.services', [])
 .factory('BoughtProducts', function($firebaseArray, GenericServices, localStorageService) {
 
   var BoughtProducts = $firebaseArray.$extend({
-    total: function() {
-      var total    = 0;
-      var currUser = localStorageService.get('userId');
+    total: function(numberofmembers) {
+      var total     = 0;
+      var usertotal = 0
+      var currUser  = localStorageService.get('userId');
 
       angular.forEach(this.$list, function(product) {
 
         if(currUser === product.owner) {
-          total = parseFloat(total) + parseFloat(product.price);
+          usertotal += parseFloat(product.price);
         }
-        else {
-          total = parseFloat(total) - parseFloat(product.price);
-        }
+        
+        total += parseFloat(product.price);
       });
 
+      var average = parseFloat(total) / parseFloat(numberofmembers);
+
       return {
-        value: Math.abs(total),
-        type: GenericServices.priceType(total)
+        value: Math.abs(parseFloat(usertotal) - parseFloat(average)),
+        type: GenericServices.priceType(parseFloat(usertotal) - parseFloat(average))
       };
     }
   });
