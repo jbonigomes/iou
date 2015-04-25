@@ -142,6 +142,12 @@ angular.module('IOU.services', [])
   return {
     list: function(members, products, userid) {
 
+      var cleanmembers = {};
+      
+      angular.forEach(members, function(member) {
+        cleanmembers[member.data.id] = member.data.name;
+      });
+
       var weight = 0;
       var average = 0;
       var listtotal = 0;
@@ -194,9 +200,9 @@ angular.module('IOU.services', [])
             var totaldebt = ((parseFloat(average) - parseFloat(value)) * parseFloat(weight)) / parseFloat(100);
             var returnobj = {
               id: key,
-              name: 'testname',
+              name: cleanmembers[key],
               total: Math.abs(totaldebt),
-              type: 'negative-total'
+              type: 'positive-total'
             };
 
             memberswithtotals.push(returnobj);
@@ -204,7 +210,7 @@ angular.module('IOU.services', [])
           else if(key !== userid) {
             var returnobj = {
               id: key,
-              name: 'testname',
+              name: cleanmembers[key],
               total: 0,
               type: 'neutral-total'
             };
@@ -230,8 +236,8 @@ angular.module('IOU.services', [])
             var totaldebt = (parseFloat(weight) * parseFloat(totaltopayback)) / parseFloat(100);
             var returnobj = {
               id: key,
-              name: 'testname',
-              total: Math.abs(totaldebt),
+              name: cleanmembers[key],
+              total: Math.abs(parseFloat(totaldebt) - parseFloat(average)),
               type: 'negative-total'
             };
 
@@ -240,7 +246,7 @@ angular.module('IOU.services', [])
           else if(key !== userid) {
             var returnobj = {
               id: key,
-              name: 'testname',
+              name: cleanmembers[key],
               total: 0,
               type: 'neutral-total'
             };
@@ -256,7 +262,7 @@ angular.module('IOU.services', [])
           if(key !== userid) {
             var returnobj = {
               id: key,
-              name: 'testname',
+              name: cleanmembers[key],
               total: 0,
               type: 'neutral-total'
             };

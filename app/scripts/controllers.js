@@ -321,6 +321,8 @@ angular.module('IOU.controllers', [])
 
 .controller('EditProductCtrl', function($scope, $state, $stateParams, IOURef, Facebook, $firebaseObject) {
 
+  var watcher = $firebaseObject(IOURef);
+
   var prodref = IOURef
     .child('lists')
     .child($scope.userdata.listid)
@@ -332,15 +334,16 @@ angular.module('IOU.controllers', [])
     price: false
   };
 
-  
-  $firebaseObject(prodref).$loaded().then(function(product) {
+  $scope.refreshList = function () {
+    $firebaseObject(prodref).$loaded().then(function(product) {
 
-    $scope.product = product;
+      $scope.product = product;
 
-    Facebook.getPerson(product.owner, $scope.userdata.token).success(function(user) {
-      $scope.username = user.name;
+      Facebook.getPerson(product.owner, $scope.userdata.token).success(function(user) {
+        $scope.username = user.name;
+      });
     });
-  });
+  };
 
   $scope.submit = function() {
 
@@ -374,6 +377,10 @@ angular.module('IOU.controllers', [])
   $scope.fetchMembers = function() {
     $state.go('app.assignmember', { productid: $stateParams.productid });
   };
+
+  $scope.refreshList();
+
+  watcher.$watch(function() { $scope.refreshList(); });
 })
 
 
@@ -433,7 +440,7 @@ angular.module('IOU.controllers', [])
   };
 
   $scope.goBack = function() {
-    $state.go('app.editproduct', { productid: $stateParams.productid });
+    $state.go('app.editproduct', { productid: $stateParams.productid }, { reload: true });
   };
 })
 

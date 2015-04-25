@@ -87,7 +87,7 @@
 .members-list {
   .negative-total:before {
     font-size: 12px;
-    content: 'owes you ';
+    content: 'you owe ';
     font-weight: normal;
     color: $clr_dark_grey;
   }
@@ -95,7 +95,7 @@
   .positive-total:before {
     font-size: 12px;
     font-weight: normal;
-    content: 'you owe ';
+    content: 'owes you ';
     color: $clr_dark_grey;
   }
 
