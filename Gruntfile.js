@@ -52,7 +52,7 @@ module.exports = function (grunt) {
         constants: {
           ENV: {
             name: 'production',
-            apiEndpoint: 'https://josefirebaseseed.firebaseio.com/',
+            apiEndpoint: 'https://ioutest.firebaseio.com/',
             facebookEndpoint: 'https://graph.facebook.com/v2.3/'
           }
         }
