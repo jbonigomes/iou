@@ -50,5 +50,8 @@
   "scripts": {
     "test": "grunt test"
   },
-  "cordovaPlugins": []
+  "cordovaPlugins": [
+    "org.apache.cordova.inappbrowser",
+    "org.apache.cordova.inappbrowser"
+  ]
 }
