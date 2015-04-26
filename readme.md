@@ -4,7 +4,7 @@
 
 Full documentation available at:
 
-http://jbonigomesbbk.github.io/
+http://iou.rocks
 
 ## Updating on Android store
 
