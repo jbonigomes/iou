@@ -1,0 +1,42 @@
+<ion-view view-title="IOU">
+  <ion-content>
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="refreshList()">
+    </ion-refresher>
+
+    <div class="overviewprice {{members.total.type}}">
+      {{ members.total.value | currency:'£':2 }}
+    </div>
+
+    <div class="inner-menu">
+      <a href="#/app/products/{{userdata.listid}}" >LIST</a>
+      <a href="#" class="active">MEMBERS</a>
+    </div>
+
+    <div class="list">
+      <ion-list>
+        <ion-item class="item-content lists-list members-list">
+          <img ng-src="https://graph.facebook.com/{{userdata.id}}/picture">
+          <span>{{ userdata.name }}</span>
+        </ion-item>
+        <ion-item ng-repeat="member in members.members"
+                  class="item-content lists-list members-list">
+          <img ng-src="https://graph.facebook.com/{{member.id}}/picture">
+          <span>{{ member.name }}</span>
+          <span class="pricetag {{member.type}}">
+            {{ member.total | currency:'£':2 }}
+          </span>
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <div class="no-items" ng-show="userdata.noitems">
+      You can add your friends to this list by clicking the ‘ADD’ buttton below
+    </div>
+
+  </ion-content>
+  <ion-footer-bar>
+    <a href="#/app/addmember" class="button button-block button-positive">
+      ADD
+    </a>
+  </ion-footer-bar>
+</ion-view>

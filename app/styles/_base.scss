@@ -1,0 +1,205 @@
+.m-l-10 {
+  margin-left: 10px;
+}
+
+.m-t-50 {
+  margin-top: 50px;
+}
+
+.select-member {
+  top: 15px;
+  right: 10px;
+  border: none;
+  display: block;
+  font-size: 24px;
+  cursor: pointer;
+  background: none;
+  position: absolute;
+}
+
+.error {
+  color: $clr_red;
+  text-align: center;
+}
+
+.success {
+  color: $clr_green;
+  text-align: center;
+}
+
+.labelerror {
+  margin-bottom: 1px;
+  border-bottom-color: $clr_red;
+}
+
+.accept-terms {
+  font-weight: bold;
+  vertical-align: 10px;
+  color: $clr_dark_grey;
+
+  a {
+    color: $clr_blue;
+  }
+}
+
+.button.button-block.login-button {
+  margin-top: 100px;
+}
+
+.no-items {
+  padding: 40px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  color: $clr_dark_grey;
+}
+
+.pricemodal {
+  top: 60px;
+  left: 50%;
+  width: 80%;
+  min-height: 185px;
+  max-height: 185px;
+  margin-left: -40%;
+}
+
+.negative-total {
+  color: $clr_red;
+}
+
+.positive-total {
+  color: $clr_green;
+}
+
+.neutral-total {
+  color: $clr_dark_grey;
+}
+
+.negative-total:before {
+  content: '-';
+}
+
+.positive-total:before {
+  content: '+';
+  vertical-align: .05em;
+}
+
+.members-list {
+  .negative-total:before {
+    font-size: 12px;
+    content: 'you owe ';
+    font-weight: normal;
+    color: $clr_dark_grey;
+  }
+
+  .positive-total:before {
+    font-size: 12px;
+    font-weight: normal;
+    content: 'owes you ';
+    color: $clr_dark_grey;
+  }
+
+  .neutral-total:before {
+    font-size: 12px;
+    content: 'even ';
+    font-weight: normal;
+    color: $clr_dark_grey;
+  }
+
+  .add-user {
+    float: right;
+  }
+}
+
+.overviewprice {
+  padding: 30px;
+  font-size: 40px;
+  text-align: center;
+  border-bottom: 1px solid $clr_light_grey;
+}
+
+.inner-menu {
+  overflow: hidden;
+
+  a {
+    width: 50%;
+    float: left;
+    display: block;
+    padding: 20px;
+    color: $clr_grey;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    border-left: 1px solid $clr_light_grey;
+  }
+
+  a.active {
+    background: $clr_lightest_grey;
+  }
+}
+
+.lists-list {
+  img {
+    width: 40px;
+    height: auto;
+  }
+
+  span {
+    vertical-align: 12px;
+  }
+
+  .pricetag {
+    float: right;
+    margin-top: 12px;
+    font-weight: bold;
+  }
+
+  .datetag {
+    top: 40px;
+    right: 15px;
+    font-size: 12px;
+    position: absolute;
+    color: $clr_dark_grey;
+  }
+
+  .item-content {
+    padding: 16px;
+  }
+}
+
+.lists-list.products-list {
+  img {
+    border-radius: 100%;
+  }
+
+  .pricetag {
+    margin-top: 5px;
+  }
+}
+
+.img-radios {
+  img {
+    width: 100%;
+    opacity: .5;
+  }
+
+  img.active {
+    opacity: 1;
+  }
+
+  input[type="radio"] {
+    display: none;
+  }
+
+  label {
+    display: block;
+  }
+}
+
+.info {
+  padding: 30px 20px;
+
+  h2 {
+    font-size: 20px;
+  }
+}

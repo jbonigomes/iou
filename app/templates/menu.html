@@ -1,0 +1,39 @@
+<ion-side-menus enable-menu-with-back-views="true">
+  <ion-side-menu-content>
+    <ion-nav-bar class="bar-stable">
+      <ion-nav-buttons side="left">
+        <a href="#/app/home" class="button button-icon ion-home"></a>
+      </ion-nav-buttons>
+
+      <ion-nav-buttons side="right">
+        <button class="button button-icon ion-navicon" menu-toggle="right">
+        </button>
+      </ion-nav-buttons>
+    </ion-nav-bar>
+
+    <ion-nav-view name="menuContent"></ion-nav-view>
+  </ion-side-menu-content>
+
+  <ion-side-menu side="right">
+    <ion-content>
+
+      <img ng-src="https://graph.facebook.com/{{userdata.id}}/picture">
+      <span>{{userdata.name}}</span>
+
+      <ion-list>
+        <ion-item nav-clear menu-close href="#/app/home">
+          Home
+        </ion-item>
+        <ion-item nav-clear menu-close href="#/app/privacy">
+          Privacy Policy
+        </ion-item>
+        <ion-item nav-clear menu-close href="#/app/terms">
+          Terms &amp; Conditions
+        </ion-item>
+        <ion-item nav-clear menu-close ng-click="logout()">
+          Logout
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-side-menu>
+</ion-side-menus>

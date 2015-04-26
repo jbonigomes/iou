@@ -1,0 +1,48 @@
+<ion-view view-title="IOU">
+  <ion-content>
+
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="refreshList()">
+    </ion-refresher>
+
+    <div class="overviewprice {{lists.type}}">
+      {{ lists.value | currency:'£':2 }}
+    </div>
+
+    <div class="no-items" ng-show="userdata.noitems">
+      You do not have any lists yet, click the ‘NEW’ button below to get started
+    </div>
+
+    <div class="list">
+      <div class="bar bar-header item-input-inset">
+        <ion-search placeholder="Search" filter="search"></ion-search>
+      </div>
+
+      <ion-list can-swipe="true">
+        <ion-item ng-repeat="item in lists.lists | filter:search.value"
+                  href="#/app/products/{{item.data.$id}}"
+                  class="item-content lists-list">
+
+          <img src="images/log_{{item.data.image}}.png">
+          <span>{{ item.data.name }}</span>
+          <span class="pricetag {{item.type}}">
+            {{ item.total | currency:'£':2 }}
+          </span>
+
+          <ion-option-button class="button-assertive icon ion-trash-a"
+                             ng-click="delete(item.data.$id)">
+          </ion-option-button>
+
+          <ion-option-button class="button-positive icon ion-edit"
+                             ng-click="goToEdit(item.data.$id)">
+          </ion-option-button>
+
+        </ion-item>
+      </ion-list>
+    </div>
+  </ion-content>
+  <ion-footer-bar>
+    <button class="button button-block button-positive" ng-click="goToNew()">
+      NEW
+    </button>
+  </ion-footer-bar>
+</ion-view>

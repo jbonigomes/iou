@@ -1,0 +1,28 @@
+<ion-view view-title="IOU">
+  <ion-content>
+    <div class="list">
+      <label class="item item-input" ng-class="{labelerror: formerrors.name}">
+        <i class="icon ion-edit placeholder-icon"></i>
+        <input type="text" placeholder="Item name" ng-model="product.name" required>
+      </label>
+
+      <label class="item item-input" ng-class="{labelerror: formerrors.price}">
+        <i class="icon ion-cash placeholder-icon"></i>
+        <input type="text" placeholder="0.00" ng-model="product.price" required>
+      </label>
+
+      <label class="item item-input">
+        <img ng-src="https://graph.facebook.com/{{product.owner}}/picture">
+        <span class="m-l-10">{{ username }}</span>
+        <button class="select-member" ng-click="fetchMembers()">
+          <i class="icon ion-chevron-right"></i>
+        </button>
+      </label>
+    </div>
+  </ion-content>
+  <ion-footer-bar>
+    <button ng-click="submit()" class="button button-block button-positive">
+      OK
+    </button>
+  </ion-footer-bar>
+</ion-view>
