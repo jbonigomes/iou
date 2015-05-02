@@ -40,30 +40,6 @@ angular.module('IOU.controllers', [])
     $scope.privacymodal.show();
   };
 
-  // must set this guy in the facebook app http://localhost/callback
-  // $scope.login = function() {
-  //   if($scope.loginUIdata.acceptedterms) {
-  //     $cordovaOauth.facebook('379065752294307', ['email','user_friends']).then(function(result) {
-  //       auth.$authWithOAuthToken('facebook', result.access_token).then(function(authData) {
-  //         var userdata = {
-  //           id: oauthdata.facebook.id,
-  //           name: oauthdata.facebook.displayName,
-  //           email: oauthdata.facebook.email,
-  //           token: oauthdata.facebook.accessToken
-  //         };
-
-  //         Login.login(userdata);
-
-  //         $state.go('app.home');
-  //       }, function(error) {
-  //         $scope.loginUIdata.loginerror = true;
-  //       });
-  //     }, function(error) {
-  //       $scope.loginUIdata.loginerror = true;
-  //     });
-  //   }
-  // };
-
   // must set this bad boy on facebook to
   // https://auth.firebase.com/v2/ioutest/auth/facebook/callback
   $scope.login = function () {
