@@ -73,6 +73,7 @@ angular.module('IOU.services', [])
       angular.forEach(this.$list, function(list) {
         var innertotal = 0;
         var usertotal = 0;
+        var average = 0;
 
         // http://www.hacksparrow.com/javascript-get-object-size.html
         var numberofmembers = Object.keys(list.members).length;
@@ -91,19 +92,19 @@ angular.module('IOU.services', [])
             // add up to the current list total
             innertotal += parseFloat(product.price);
           });
+
+          average = parseFloat(innertotal) / parseFloat(numberofmembers);
+
+          // build the inner lists object
+          fullLists.push({
+            data: list,
+            total: Math.abs(parseFloat(usertotal) - parseFloat(average)),
+            type: GenericServices.priceType(parseFloat(usertotal) - parseFloat(average))
+          });
+
+          // and keep adding on to the 'all lists' total
+          total += parseFloat(usertotal) - parseFloat(average);
         }
-
-        var average = parseFloat(innertotal) / parseFloat(numberofmembers);
-
-        // build the inner lists object
-        fullLists.push({
-          data: list,
-          total: Math.abs(parseFloat(usertotal) - parseFloat(average)),
-          type: GenericServices.priceType(parseFloat(usertotal) - parseFloat(average))
-        });
-
-        // and keep adding on to the 'all lists' total
-        total += parseFloat(usertotal) - parseFloat(average);
       });
 
       return {
