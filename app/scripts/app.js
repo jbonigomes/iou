@@ -34,33 +34,4 @@ angular.module('IOU', [
 
     $ionicListDelegate.closeOptionButtons();
   });
-})
-
-
-// http interceptors
-// http://thecodebarbarian.com/2015/01/24/angularjs-interceptors
-.config(function($httpProvider) {
-
-  var logsOutUserOn401 = ['$q', '$state', function ($q, $state) {
-    var success = function (response) {
-      return response;
-    };
-
-    var error = function (response) {
-      if (response.status === 401) {
-        $state.go('login');
-        return $q.reject(response);
-      }
-      else {
-        return $q.reject(response);
-      }
-    };
-
-    return function (promise) {
-      return promise.then(success, error);
-    };
-  }];
-
-  $httpProvider.responseInterceptors.push(logsOutUserOn401);
-
 });
