@@ -3,7 +3,7 @@
 angular.module('IOU.controllers', [])
 
 
-.controller('LoginCtrl', function($scope, $ionicModal, $firebaseAuth, $cordovaOauth, $state, IOURef, Login) {
+.controller('LoginCtrl', function($scope, $ionicModal, $firebaseAuth, $state, IOURef, Login) {
 
   var auth = $firebaseAuth(IOURef);
 
