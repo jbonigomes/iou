@@ -423,6 +423,8 @@ angular.module('IOU.controllers', [])
 
 .controller('MembersCtrl', function($scope, IOURef, MembersWithTotal, $firebaseObject, Facebook, $q) {
 
+  var watcher = $firebaseObject(IOURef);
+
   $scope.members = [];
 
   var listref = IOURef
@@ -454,6 +456,8 @@ angular.module('IOU.controllers', [])
   };
 
   $scope.refreshList();
+
+  watcher.$watch(function() { $scope.refreshList(); });
 })
 
 
